@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 public class Producto extends Base {
 
+    // TODO validar en service
     private String nombre;
     private double precio;
     private String descripcion;
@@ -40,86 +41,37 @@ public class Producto extends Base {
     public String getNombre() {
         return nombre;
     }
-
-    public void setNombre(String nombre) {
-
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nombre inválido");
-        }
-        this.nombre = nombre;
-    }
+    public void setNombre(String nombre) {this.nombre = nombre;}
 
     public double getPrecio() {
         return precio;
     }
-
-    public void setPrecio(double precio) {
-
-        if (precio < 0) {
-            throw new IllegalArgumentException("Precio inválido");
-        }
-
-        this.precio = precio;
-    }
+    public void setPrecio(double precio) {this.precio = precio;}
 
     public String getDescripcion() {
         return descripcion;
     }
-
-    public void setDescripcion(String descripcion) {
-
-        if (descripcion == null || descripcion.trim().isEmpty()) {
-            throw new IllegalArgumentException("Descripción inválida");
-        }
-
-        this.descripcion = descripcion;
-    }
+    public void setDescripcion(String descripcion) {this.descripcion = descripcion;}
 
     public int getStock() {
         return stock;
     }
-
-    public void setStock(int stock) {
-
-        if (stock < 0) {
-            throw new IllegalArgumentException("Stock inválido");
-        }
-        this.stock = stock;
-    }
+    public void setStock(int stock) {this.stock = stock;}
 
     public String getImagen() {
         return imagen;
     }
-
-    public void setImagen(String imagen) {
-
-        if (imagen == null || imagen.trim().isEmpty()) {
-            throw new IllegalArgumentException("Imagen inválida");
-        }
-
-        this.imagen = imagen;
-    }
+    public void setImagen(String imagen) {this.imagen = imagen;}
 
     public boolean isDisponible() {
         return disponible;
     }
-
     public void setDisponible() {
         this.disponible = this.stock > 0;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-
-        if (categoria == null) {
-            throw new IllegalArgumentException("Categoría inválida");
-        }
-
-        this.categoria = categoria;
-    }
+    public Categoria getCategoria() {return categoria;}
+    public void setCategoria(Categoria categoria) {this.categoria = categoria;}
 
     @Override
     public String toString() {
