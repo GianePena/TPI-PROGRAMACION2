@@ -80,6 +80,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
                             rs.getString("descripcion"),
                             rs.getInt("stock"),
                             rs.getString("imagen"),
+                            rs.getBoolean("disponible"),
                             categoria
                     );
                     categoria.agregarProducto(producto);
