@@ -22,19 +22,19 @@ public class Producto extends Base {
         this.setDescripcion(descripcion);
         this.setStock(stock);
         this.setImagen(imagen);
-        this.setDisponible();
+        this.setDisponible(stock > 0);
         this.setCategoria(categoria);
     }
 
     // Constructor producto recuperado de la DB
-    public Producto(Long id, boolean eliminado, LocalDateTime createdAt, String nombre, double precio, String descripcion, int stock, String imagen, Categoria categoria) {
+    public Producto(Long id, boolean eliminado, LocalDateTime createdAt, String nombre, double precio, String descripcion, int stock, String imagen, Boolean disponible, Categoria categoria) {
         super(id, eliminado, createdAt);
         this.setNombre(nombre);
         this.setPrecio(precio);
         this.setDescripcion(descripcion);
         this.setStock(stock);
         this.setImagen(imagen);
-        this.setDisponible();
+        this.setDisponible(disponible);
         this.setCategoria(categoria);
     }
 
@@ -56,7 +56,10 @@ public class Producto extends Base {
     public int getStock() {
         return stock;
     }
-    public void setStock(int stock) {this.stock = stock;}
+    public void setStock(int stock) {
+        this.stock = stock;
+        this.disponible = stock > 0;
+    }
 
     public String getImagen() {
         return imagen;
@@ -66,8 +69,8 @@ public class Producto extends Base {
     public boolean isDisponible() {
         return disponible;
     }
-    public void setDisponible() {
-        this.disponible = this.stock > 0;
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 
     public Categoria getCategoria() {return categoria;}
