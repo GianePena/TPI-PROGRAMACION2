@@ -109,7 +109,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
                         rs.getString("nombre"),
                         rs.getString("descripcion")
                 );
-                buscarProductoPorCategoria(categoria);
+                //buscarProductoPorCategoria(categoria);
                 catagorias.add(categoria);
                 }
             return catagorias;

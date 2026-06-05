@@ -51,7 +51,7 @@ public class MainProducto {
         if (productos.isEmpty()) {
             System.out.println("No hay productos cargados");
         } else {
-            Utilidades.mostrarLista(productos);
+            Utilidades.mostrarListaProductos(productos);
         }
     }
 
@@ -77,7 +77,7 @@ public class MainProducto {
             String imagen = Utilidades.leerString(sc);
 
             System.out.println("=== CATEGORIAS DISPONIBLES ===");
-            Utilidades.mostrarLista(categoriaService.listarCategorias());
+            Utilidades.mostrarListaCategoria(categoriaService.listarCategorias());
 
             System.out.print("ID Categoria: ");
             Long idCategoria = Utilidades.leerLong(sc);
