@@ -72,4 +72,8 @@ public class Base {
                 (this.deletedAt!=null?"- deletedAt=" + deletedAt :"" );
 
     }
+
+    public Thread getCategoria() {
+        return null;
+    }
 }
