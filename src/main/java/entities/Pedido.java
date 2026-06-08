@@ -129,6 +129,27 @@ public class Pedido extends Base implements Calculable {
                 '}';
     }
 
+    public double getPrecio() {
+    }
+
+    public String getNombre() {
+    }
+
+    public String getDescripcion() {
+    }
+
+    public int getStock() {
+    }
+
+    public String getImagen() {
+    }
+
+    public boolean isDisponible() {
+    }
+
+    public void setId(Long idGenerado) {
+    }
+
 // relación de composición 1:N con DetallePedido).
 // Crear adentro del constructor
 // Implementa la interfaz Calculable (método calcularTotal()).
