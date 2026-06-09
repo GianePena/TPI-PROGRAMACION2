@@ -16,9 +16,7 @@ public class MainProducto {
 
     private static final ProductoService service = new ProductoService();
     private static final CategoriaService categoriaService = new CategoriaService();
-
     public static void menuProducto(int opcion, Scanner sc) {
-
         switch (opcion) {
 
             case 1:

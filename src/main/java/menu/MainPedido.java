@@ -6,6 +6,7 @@ import enums.Estado;
 import enums.FormaPago;
 import service.PedidoService;
 import entities.Producto;
+import service.ProductoService;
 
 import java.util.List;
 import java.util.Scanner;
@@ -58,7 +59,7 @@ public class MainPedido {
             System.out.println("ID de usuario: ");
             Long uid = leerLong();
             List<Pedido> lista = pedidoService.listarPorUsuario(uid);
-            if(lista.isEmpty() System.out.println("No hay usuario para ese pedido.");
+            if(lista.isEmpty()) System.out.println("No hay usuario para ese pedido.");
             else lista.forEach(p -> {
                 System.out.println(p);
                 p.getDetalles().stream().filter(d -> !d.isEliminado()).forEach(System.out::println);
@@ -99,7 +100,7 @@ public class MainPedido {
             }
 
             pedidoService.guardar(pedido);
-            System.out.println("Pedido creado. ID: " + pedido.gerId() + " | total: $" pedido.getTotal());
+            System.out.println("Pedido creado. ID: " + pedido.gerId() + " | total: $" + pedido.getTotal());
         } catch (Exception e) {
             System.out.println("Error al crear pedido: " + e.getMessage());
             System.out.println("El pedido fue cancelado y no fue guardado.");

@@ -21,7 +21,7 @@ public class Pedido extends Base implements Calculable {
 
     public Pedido() {
         super();
-        this.detalles =  new ArrayList<>();
+        this.detalles = new ArrayList<>();
         this.fecha = LocalDate.now();
         this.estado = Estado.PENDIENTE;
     }
@@ -40,12 +40,12 @@ public class Pedido extends Base implements Calculable {
                   FormaPago formaPago, Usuario usuario,
                   boolean eliminado, LocalDateTime createdAt) {
         super(id, eliminado, createdAt);
-        this.fecha     = fecha;
-        this.estado    = estado;
-        this.total     = total;
+        this.fecha = fecha;
+        this.estado = estado;
+        this.total = total;
         this.formaPago = formaPago;
-        this.usuario   = usuario;
-        this.detalles  = new ArrayList<>();
+        this.usuario = usuario;
+        this.detalles = new ArrayList<>();
     }
 
     public void addDetallePedido(int cantidad, double precioUnitario, Producto producto) {
@@ -55,7 +55,7 @@ public class Pedido extends Base implements Calculable {
     }
 
     public DetallePedido findeDetallePedidoByProducto(Producto producto) {
-        return detalles.stream().filter(d -> d.getProducto() != null && d.getProducto()equals(producto)).findFirst().orElse(null);
+        return detalles.stream().filter(d -> d.getProducto() != null && d.getProducto().equals(producto)).findFirst().orElse(null);
     }
 
     public void deleteDetallePedidoByProducto(Producto producto) {
@@ -114,41 +114,24 @@ public class Pedido extends Base implements Calculable {
     public List<DetallePedido> getDetalles() {
         return detalles;
     }
+
     public void setDetalles(List<DetallePedido> d) {
         this.detalles = d;
     }
 
-    @java.lang.Override
-    public java.lang.String toString() {
+
+    @Override
+    public String toString() {
         return "Pedido{" +
                 "fecha=" + fecha +
                 ", estado=" + estado +
                 ", total=" + total +
                 ", formaPago=" + formaPago +
                 ", usuario=" + usuario +
+                ", detalles=" + detalles +
                 '}';
     }
-
-    public double getPrecio() {
-    }
-
-    public String getNombre() {
-    }
-
-    public String getDescripcion() {
-    }
-
-    public int getStock() {
-    }
-
-    public String getImagen() {
-    }
-
-    public boolean isDisponible() {
-    }
-
-    public void setId(Long idGenerado) {
-    }
+}
 
 // relación de composición 1:N con DetallePedido).
 // Crear adentro del constructor

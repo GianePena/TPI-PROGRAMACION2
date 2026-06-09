@@ -51,7 +51,7 @@ public class Base {
     }
 
     public void setUpdatedAt() {
-        this.updatedAt = Utilidades.generarFecha();;
+        this.updatedAt = Utilidades.generarFecha();
     }
 
     public void setEliminado(boolean eliminado) {
@@ -73,7 +73,4 @@ public class Base {
 
     }
 
-    public Thread getCategoria() {
-        return null;
-    }
 }

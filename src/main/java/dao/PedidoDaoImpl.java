@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PedidoDaoImpl implements PedidoDao {
+public class PedidoDaoImpl implements PedidoDao {
 
     @Override
     public Long guardar(Pedido p) {
