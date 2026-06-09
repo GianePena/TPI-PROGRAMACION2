@@ -1,5 +1,4 @@
 package entities;
-
 import java.time.LocalDateTime;
 
 public class Producto extends Base {
@@ -89,3 +88,4 @@ public class Producto extends Base {
                 "\n" + super.toString();
     }
 }
+
