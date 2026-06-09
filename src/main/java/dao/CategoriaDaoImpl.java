@@ -62,7 +62,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
         }
     }
     public void buscarProductoPorCategoria(Categoria categoria){
-        String sql="SELECT * FROM productos WHERE id_categoria=? AND eliminado = false";
+        String sql="SELECT * FROM producto WHERE id=? AND eliminado = false";
         try(
                 Connection con = HikariConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)
@@ -109,6 +109,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
                         rs.getString("nombre"),
                         rs.getString("descripcion")
                 );
+                buscarProductoPorCategoria(categoria);
                 catagorias.add(categoria);
                 }
             return catagorias;
