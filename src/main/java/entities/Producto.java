@@ -76,11 +76,6 @@ public class Producto extends Base {
     public Categoria getCategoria() {return categoria;}
     public void setCategoria(Categoria categoria) {this.categoria = categoria;}
 
-
-    public void prueba(){
-        System.out.println("HOlis");
-    }
-
     @Override
     public String toString() {
         return "PRODUCTO: " +
