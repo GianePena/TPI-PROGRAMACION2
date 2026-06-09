@@ -5,24 +5,30 @@ import utilidades.Utilidades;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public abstract class Base {
-    private Long id;
+public class Base {
+    protected Long id;
     private boolean eliminado;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public Base(Long id, LocalDateTime createdAt) {
-        this.id=id;
+
+    // Constructor para objetos nuevos
+    public Base() {
         this.eliminado = false;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    // Constructor para objetos recuperados de la DB
+    public Base(Long id, boolean eliminado, LocalDateTime createdAt) {
+        this.id = id;
+        this.eliminado = eliminado;
         this.createdAt = createdAt;
     }
 
-    public Base() {
-        this.eliminado = false;
-        this.createdAt = Utilidades.generarFecha();
+    public void setId(Long id){
+        this.id = id;
     }
-
 
     public Long getId() {
         return id;
@@ -45,7 +51,7 @@ public abstract class Base {
     }
 
     public void setUpdatedAt() {
-        this.updatedAt = Utilidades.generarFecha();;
+        this.updatedAt = Utilidades.generarFecha();
     }
 
     public void setEliminado(boolean eliminado) {
@@ -66,4 +72,5 @@ public abstract class Base {
                 (this.deletedAt!=null?"- deletedAt=" + deletedAt :"" );
 
     }
+
 }

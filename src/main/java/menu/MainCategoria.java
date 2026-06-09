@@ -41,7 +41,7 @@ public class MainCategoria {
         if(categorias.isEmpty()){
             System.out.println("No hay categorías cargadas");
         }else{
-            Utilidades.mostrarLista(categorias);
+            Utilidades.mostrarListaCategoria(categorias);
         }
     }
     private static void crearCategoria(Scanner sc){

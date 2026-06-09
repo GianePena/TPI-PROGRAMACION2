@@ -14,7 +14,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
         String sql="INSERT INTO categoria (nombre, descripcion, eliminado, created_at) VALUES( ?, ?, ?, ?)";
         try(
                 Connection con = HikariConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, c.getNombre());
             ps.setString(2, c.getDescripcion());
@@ -22,10 +22,13 @@ public class CategoriaDaoImpl implements CategoriaDao{
             ps.setTimestamp(4, Timestamp.valueOf(c.getCreatedAt()));
 
             int filasAfectadas = ps.executeUpdate();
+
             if (filasAfectadas > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
-                    if(rs.next()){
-                        return rs.getLong(1);
+                    if (rs.next()) {
+                        Long idGenerado = rs.getLong(1);
+                        c.setId(idGenerado);
+                        return idGenerado;
                     }
                 }
             }
@@ -38,17 +41,18 @@ public class CategoriaDaoImpl implements CategoriaDao{
         String sql="SELECT * FROM categoria WHERE nombre=? AND eliminado = false";
         try(
                 Connection con = HikariConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = con.prepareStatement(sql)
              ) {
             ps.setString(1, nombre);
             try(ResultSet rs=ps.executeQuery()){
                 if(rs.next()){
                    return new Categoria(
-                            rs.getLong("id"),
-                            rs.getString("nombre"),
-                            rs.getString("descripcion"),
-                           rs.getTimestamp("created_at").toLocalDateTime()
-                    );
+                           rs.getLong("id"),
+                           rs.getBoolean("eliminado"),
+                           rs.getTimestamp("created_at").toLocalDateTime(),
+                           rs.getString("nombre"),
+                           rs.getString("descripcion")
+                   );
                 }
             }
             return null;
@@ -58,23 +62,26 @@ public class CategoriaDaoImpl implements CategoriaDao{
         }
     }
     public void buscarProductoPorCategoria(Categoria categoria){
-        String sql="SELECT * FROM productos WHERE categoria=? AND eliminado = false";
+        String sql="SELECT * FROM productos WHERE id_categoria=? AND eliminado = false";
         try(
                 Connection con = HikariConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = con.prepareStatement(sql)
         ){
-            ps.setString(1, categoria.getNombre());
+            ps.setLong(1, categoria.getId());
             try(ResultSet rs = ps.executeQuery()){
                 while(rs.next()){
 
                     Producto producto = new Producto(
                             rs.getLong("id"),
+                            rs.getBoolean("eliminado"),
+                            rs.getTimestamp("created_at").toLocalDateTime(),
                             rs.getString("nombre"),
                             rs.getDouble("precio"),
                             rs.getString("descripcion"),
                             rs.getInt("stock"),
                             rs.getString("imagen"),
-                            rs.getBoolean("disponible")
+                            rs.getBoolean("disponible"),
+                            categoria
                     );
                     categoria.agregarProducto(producto);
                 }
@@ -87,21 +94,21 @@ public class CategoriaDaoImpl implements CategoriaDao{
 
     @Override
     public List<Categoria> listar() {
-        String sql="SELECT * FROM categoria WHERE eliminado<>true AND eliminado = false";
+        String sql="SELECT * FROM categoria WHERE eliminado = false";
         List<Categoria>catagorias=new ArrayList<>();
         try(
                 Connection con = HikariConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = con.prepareStatement(sql)
         ){
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
                 Categoria categoria= new Categoria(
                         rs.getLong("id"),
+                        rs.getBoolean("eliminado"),
+                        rs.getTimestamp("created_at").toLocalDateTime(),
                         rs.getString("nombre"),
-                        rs.getString("descripcion"),
-                        rs.getTimestamp("created_at").toLocalDateTime()
-                    );
-                buscarProductoPorCategoria(categoria);
+                        rs.getString("descripcion")
+                );
                 catagorias.add(categoria);
                 }
             return catagorias;
@@ -117,16 +124,17 @@ public class CategoriaDaoImpl implements CategoriaDao{
         Categoria categoria;
         try(
                 Connection con = HikariConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = con.prepareStatement(sql)
         ){
             ps.setLong(1,id);
             try(ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
                     return  new Categoria(
                             rs.getLong("id"),
+                            rs.getBoolean("eliminado"),
+                            rs.getTimestamp("created_at").toLocalDateTime(),
                             rs.getString("nombre"),
-                            rs.getString("descripcion"),
-                            rs.getTimestamp("created_at").toLocalDateTime()
+                            rs.getString("descripcion")
                     );
                 }
             }
@@ -143,7 +151,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
         String sql="UPDATE categoria SET nombre=?, descripcion=?, updated_at=? WHERE id=? AND eliminado = false";
         try(
                 Connection con = HikariConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = con.prepareStatement(sql)
         ){
             ps.setString(1,c.getNombre());
             ps.setString(2, c.getDescripcion());
@@ -165,7 +173,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
         String sql="UPDATE categoria SET eliminado=?, deleted_at=? WHERE id=?";
         try(
                 Connection con = HikariConnection.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
+                PreparedStatement ps = con.prepareStatement(sql)
         ){
             ps.setBoolean(1, c.isEliminado());
             ps.setTimestamp(2, Timestamp.valueOf(c.getDeletedAt()));

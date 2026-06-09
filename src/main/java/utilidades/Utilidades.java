@@ -1,8 +1,10 @@
 package utilidades;
 
 import entities.Categoria;
+import entities.Producto;
 import exceptions.StringInvalidException;
 import menu.MainCategoria;
+import menu.MainProducto;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,14 +21,17 @@ public class Utilidades {
             throw new StringInvalidException("Error ingreso invalido");
         }
     }
-
-    public static void mostrarLista(List<Categoria> categorias) {
-        for (Categoria c : categorias) {
+    public static void mostrarListaCategoria(List<Categoria> categorias){
+        for(Categoria c:categorias){
             System.out.println(c);
         }
     }
-
-    static void mostrarOpcionesMenu() {
+    public static void mostrarListaProductos(List<Producto> productos){
+        for(Producto p: productos){
+            System.out.println(p);
+        }
+    }
+    static void mostrarOpcionesMenu(){
         System.out.println("=== SISTEMA DE PEDIDOS (FOOD STORE) ===");
         System.out.println("1. Categorias");
         System.out.println("2. Productos");
@@ -41,7 +46,6 @@ public class Utilidades {
         System.out.println("  2. Crear");
         System.out.println("  3. Editar");
         System.out.println("  4. Eliminar");
-        System.out.print("Ingrese una opcion: ");
         System.out.print("Ingrese una opcion: ");
 
     }
@@ -84,17 +88,20 @@ public class Utilidades {
     public static void mostrarMenu(Scanner sc) {
         while (true) {
             mostrarOpcionesMenu();
-            int opcion = leerInt(sc);
-            switch (opcion) {
+            int opcion=leerInt(sc);
+            int subOpcion;
+            switch (opcion){
                 case 1:
                     System.out.println("=== CATEGORIAS ===");
                     mostrarSubopcionesMenu(sc);
-                    int subOpcion = leerInt(sc);
+                    subOpcion = leerInt(sc);
                     MainCategoria.menuCategoria(subOpcion, sc);
                     continue;
                 case 2:
                     System.out.println("=== PRODUCTOS ===");
                     mostrarSubopcionesMenu(sc);
+                    subOpcion = leerInt(sc);
+                    MainProducto.menuProducto(subOpcion, sc);
                     continue;
 
                 case 3:

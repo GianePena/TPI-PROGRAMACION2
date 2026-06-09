@@ -1,8 +1,6 @@
 package entities;
 
 
-import exceptions.StringInvalidException;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,44 +8,71 @@ import java.util.List;
 public class Categoria extends Base{
     private String nombre;
     private String descripcion;
-    private List<Producto> productos=new ArrayList<>();
+    private List<Producto> productos = new ArrayList<>();
 
-    public Categoria(Long id, String nombre, String descripcion, LocalDateTime localDateTime) {
-        super(id, localDateTime);
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-    }
+    // Constructor para una categoria nueva
     public Categoria(String nombre, String descripcion) {
         super();
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+        setNombre(nombre);
+        setDescripcion(descripcion);
     }
+
+    // Constructor para reconstruir desde la DB
+    public Categoria(Long id, boolean eliminado, LocalDateTime createdAt, String nombre, String descripcion) {
+        super(id, eliminado, createdAt);
+        setNombre(nombre);
+        setDescripcion(descripcion);
+    }
+
+    public Categoria(String nombre) {
+        super();
+        this.nombre = nombre;
+        this.descripcion = "Sin descripcion";
+    }
+
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }
+    public void setNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nombre inválido");
+        }
+        this.nombre = nombre;
+    }
+
 
     public String getDescripcion() {
         return descripcion;
     }
-
-    public void setNombre(String nombre) throws StringInvalidException{
-        this.nombre = nombre;
-
-    }
-    public void agregarProducto(Producto producto){
-        this.productos.add(producto);
-    }
-
-
-    public void setDescripcion(String descripcion) throws StringInvalidException{
+    public void setDescripcion(String descripcion) {
+        if (descripcion == null || descripcion.trim().isEmpty()) {
+            throw new IllegalArgumentException("Descripción inválida");
+        }
         this.descripcion = descripcion;
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
+    }
+    public void setProductos(List<Producto> productos) {
+        if (productos == null) {
+            throw new IllegalArgumentException("Lista inválida");
+        }
+        this.productos = productos;
+    }
+
+    // Metodos
+    public void agregarProducto(Producto producto){
+        // TODO validarlo antes de agregarlo
+        this.productos.add(producto);
     }
 
     @Override
     public String toString() {
         String productosStr="";
         for(Producto p:productos){
-            //productosStr+=p.getNombre()+'\n';
+            productosStr+=p.getNombre()+'\n';
         }
         return super.toString()+
                 "Categoria: '" + nombre + '\'' +
