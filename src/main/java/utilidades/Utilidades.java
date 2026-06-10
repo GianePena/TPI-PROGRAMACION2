@@ -12,12 +12,12 @@ import java.util.Scanner;
 
 public class Utilidades {
 
-    static public LocalDateTime generarFecha(){
+    static public LocalDateTime generarFecha() {
         return LocalDateTime.now();
     }
 
-    static public void validarString(String str) throws StringInvalidException{
-        if(str==null || str.trim().isEmpty()){
+    static public void validarString(String str) throws StringInvalidException {
+        if (str == null || str.trim().isEmpty()) {
             throw new StringInvalidException("Error ingreso invalido");
         }
     }
@@ -40,7 +40,8 @@ public class Utilidades {
         System.out.println("0. Salir");
         System.out.print("Ingrese una opcion: ");
     }
-    static void mostrarSubopcionesMenu(Scanner sc){
+
+    static void mostrarSubopcionesMenu(Scanner sc) {
         System.out.println("  1. Listar");
         System.out.println("  2. Crear");
         System.out.println("  3. Editar");
@@ -48,6 +49,7 @@ public class Utilidades {
         System.out.print("Ingrese una opcion: ");
 
     }
+
     public static String leerString(Scanner sc) {
         while (true) {
             try {
@@ -55,33 +57,36 @@ public class Utilidades {
                 Utilidades.validarString(str);
                 return str;
             } catch (StringInvalidException e) {
-                System.out.print("Texto invalido "+e.getMessage());
+                System.out.print("Texto invalido " + e.getMessage());
                 System.out.println("Intente nuevamente");
             }
         }
     }
+
     public static Long leerLong(Scanner sc) {
         while (true) {
             try {
-                Long id=Long.parseLong(sc.nextLine().trim());
+                Long id = Long.parseLong(sc.nextLine().trim());
                 return id;
             } catch (NumberFormatException e) {
-                System.out.print("ID invalida: "+ e.getMessage() );
+                System.out.print("ID invalida: " + e.getMessage());
             }
         }
     }
+
     public static int leerInt(Scanner sc) {
         while (true) {
             try {
-                int num= Integer.parseInt(sc.nextLine().trim());
+                int num = Integer.parseInt(sc.nextLine().trim());
                 return num;
             } catch (NumberFormatException e) {
-                System.out.print("Opcion invalida, ingrese un numero: "+ e.getMessage() );
+                System.out.print("Opcion invalida, ingrese un numero: " + e.getMessage());
             }
         }
     }
-    public static void mostrarMenu(Scanner sc){
-        while (true){
+
+    public static void mostrarMenu(Scanner sc) {
+        while (true) {
             mostrarOpcionesMenu();
             int opcion=leerInt(sc);
             int subOpcion;
