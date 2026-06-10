@@ -2,6 +2,8 @@ package entities;
 
 import enums.Rol;
 
+import java.time.LocalDateTime;
+
 public class Usuario extends Base {
     private String nombre;
     private String apellido;
@@ -10,19 +12,29 @@ public class Usuario extends Base {
     private String contrasenia;
     private Rol rol;
 
-    public Usuario(String trim, String trimmed, String s, String string, String trim1, Rol rol) {
-        super();
-    }
 
     public Usuario(String nombre, String apellido, String mail, String celular, Rol rol) {
         super();
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.mail = mail;
-        this.celular = this.celular;
-        this.contrasenia = contrasenia;
-        this.rol = rol;
+        this.setNombre(nombre);
+        this.setApellido(apellido);
+        this.setMail(mail);
+        this.setCelular(celular);
+        this.setContrasenia(contrasenia);
+        this.setRol(rol);
+    }
 
+    public Usuario(Long id, boolean eliminado, LocalDateTime createdAt, String nombre, String apellido, String mail, String celular, String contrasenia, Rol rol) {
+        super(id, eliminado, createdAt);
+        this.setNombre(nombre);
+        this.setApellido(apellido);
+        this.setMail(mail);
+        this.setCelular(celular);
+        this.setContrasenia(contrasenia);
+        this.setRol(rol);
+    }
+
+    public Usuario(String trim, String trimmed, String s, String string, String trim1, Rol rol) {
+        super();
     }
 
     public String getNombre() {
@@ -76,7 +88,7 @@ public class Usuario extends Base {
                 '}';
 
         }
-         public String toStringLista() {
+        public String toStringLista() {
         return String.format("ID %d - %s %s - Mail: %s - Celular: %s - Contasenia: %s - Rol: %s",
                 getId(), nombre , apellido, mail, celular, contrasenia, rol);
 

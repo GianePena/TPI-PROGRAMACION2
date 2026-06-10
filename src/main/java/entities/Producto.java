@@ -85,7 +85,7 @@ public class Producto extends Base {
                 "\n| Stock: " + stock +
                 "\n| Imagen: " + imagen +
                 "\n| Disponible: " + disponible +
-                "\n| Categoria: " + categoria.getNombre() +
+                "\n| Categoria: " + categoria.getNombre()+
                 "\n" + super.toString();
     }
 }

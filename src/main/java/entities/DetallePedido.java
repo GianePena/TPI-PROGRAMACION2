@@ -3,7 +3,6 @@ package entities;
 import java.time.LocalDateTime;
 
 public class DetallePedido extends Base{
-    //  cantidad, subtotal (y relación N:1 con Producto).
    private int cantidad;
    private double subtotal;
    private Producto producto;

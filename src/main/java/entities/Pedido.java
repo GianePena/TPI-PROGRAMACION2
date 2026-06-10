@@ -36,9 +36,7 @@ public class Pedido extends Base implements Calculable {
         this.total = 0.0;
     }
 
-    public Pedido(Long id, LocalDate fecha, Estado estado, double total,
-                  FormaPago formaPago, Usuario usuario,
-                  boolean eliminado, LocalDateTime createdAt) {
+    public Pedido(Long id, LocalDate fecha, Estado estado, double total,  FormaPago formaPago, Usuario usuario,  boolean eliminado, LocalDateTime createdAt) {
         super(id, eliminado, createdAt);
         this.fecha = fecha;
         this.estado = estado;
@@ -133,11 +131,4 @@ public class Pedido extends Base implements Calculable {
     }
 }
 
-// relación de composición 1:N con DetallePedido).
-// Crear adentro del constructor
-// Implementa la interfaz Calculable (método calcularTotal()).
-// Métodos propios: addDetallePedido(int, Double, Producto),
-//findeDetallePedidoByProducto(Producto),
-//deleteDetallePedidoByProducto(Producto).
-// hereda de Base + fecha (LocalDate), estado, total, formaPago
 
