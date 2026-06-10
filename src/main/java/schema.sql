@@ -23,6 +23,6 @@ CREATE TABLE IF NOT EXISTS producto(
     eliminado   BOOLEAN DEFAULT FALSE,
     created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME DEFAULT NULL,
-    deleted_at  DATETIME DEFAULT NULL
-    -- FOREIGN KEY (categoria_id) REFERENCES categoria(categoria_id)
+    deleted_at  DATETIME DEFAULT NULL,
+    FOREIGN KEY (categoria_id) REFERENCES categoria(id)
     );

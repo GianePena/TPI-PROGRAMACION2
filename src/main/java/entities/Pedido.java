@@ -122,14 +122,13 @@ public class Pedido extends Base implements Calculable {
 
     @Override
     public String toString() {
-        return "Pedido{" +
-                "fecha=" + fecha +
-                ", estado=" + estado +
-                ", total=" + total +
-                ", formaPago=" + formaPago +
-                ", usuario=" + usuario +
-                ", detalles=" + detalles +
-                '}';
+        return "| Pedido: " +
+                "\n| Fecha: " + fecha +
+                "\n| Estado: "+ estado +
+                "\n| Total: " + total +
+                "\n| Forma de Pago: " + formaPago +
+                "\n| Usuario: " + usuario +
+                "\n| Detalles: " + detalles;
     }
 }
 

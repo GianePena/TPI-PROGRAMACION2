@@ -13,7 +13,6 @@ public class Main {
         String sql = new String(Files.readAllBytes(
                 Paths.get("src/main/java/schema.sql")
         ));
-
         try (Connection conn = HikariConnection.getConnection();
              Statement stmt = conn.createStatement()) {
 
