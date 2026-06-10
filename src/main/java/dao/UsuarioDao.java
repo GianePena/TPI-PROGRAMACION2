@@ -1,6 +1,6 @@
 package dao;
 
 public class UsuarioDao {
-    public <T> ScopedValue<T> buscarPorId(Long usuarioId) {
-    }
+   // public <T> ScopedValue<T> buscarPorId(Long usuarioId) {
+    //}
 }
