@@ -11,37 +11,31 @@ import java.util.Scanner;
 
 public class MainUsuario {
 
-    private final UsuarioService usuarioService;
+    private static final UsuarioService usuarioService =new UsuarioService();
+    public static void menuUsuario(int opcion, Scanner sc){
+        switch (opcion){
+            case 1:
+                listarUsuarios();
+                break;
 
-    public MainUsuario(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+            case 2:
+                crearUsuario(sc);
+                break;
+
+            case 3:
+                editarUsuario(sc);
+                break;
+
+            case 4:
+                eliminarUsuario(sc);
+                break;
+
+            default:
+                System.out.println("Opcion invalida. Ingrese una opcion del 1 al 4.");
+        }
     }
 
-    public void mostrarMenu(Scanner sc) {
-        int opcion;
-        do {
-            System.out.println("\n=== MENU USUARIOS ===");
-            System.out.println("1. Listar usuarios");
-            System.out.println("2. Crear usuario");
-            System.out.println("3. Editar usuario");
-            System.out.println("4. Eliminar usuario");
-            System.out.println("0. Volver al menu principal");
-            System.out.print("Seleccione: ");
-
-            opcion = Utilidades.leerInt(sc);
-
-            switch (opcion) {
-                case 1 -> listarUsuarios();
-                case 2 -> crearUsuario(sc);
-                case 3 -> editarUsuario(sc);
-                case 4 -> eliminarUsuario(sc);
-                case 0 -> System.out.println("Volviendo...");
-                default -> System.out.println("Opcion invalida");
-            }
-        } while (opcion != 0);
-    }
-
-    private void listarUsuarios() {
+    private static void listarUsuarios() {
         System.out.println("\n--- LISTADO DE USUARIOS ---");
         List<Usuario> lista = usuarioService.listarUsuarios();
 
@@ -54,7 +48,7 @@ public class MainUsuario {
         }
     }
 
-    private void crearUsuario(Scanner sc) {
+    private static void crearUsuario(Scanner sc) {
         System.out.println("\n--- CREAR USUARIO ---");
 
         System.out.print("Nombre: ");
@@ -84,7 +78,7 @@ public class MainUsuario {
         }
     }
 
-    private void editarUsuario(Scanner sc) {
+    private static void editarUsuario(Scanner sc) {
         System.out.println("\n--- EDITAR USUARIO ---");
         listarUsuarios();
 
@@ -129,7 +123,7 @@ public class MainUsuario {
         }
     }
 
-    private void eliminarUsuario(Scanner sc) {
+    private static void eliminarUsuario(Scanner sc) {
         System.out.println("\n--- ELIMINAR USUARIO ---");
         listarUsuarios();
 

@@ -5,6 +5,7 @@ import dao.UsuarioDaoImpl;
 import entities.Usuario;
 import enums.Rol;
 import exceptions.UsuarioExistenteException;
+import utilidades.Utilidades;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +66,7 @@ public class UsuarioService {
         usuario.setCelular(celular);
         usuario.setContrasenia(contrasenia);
         usuario.setRol(rol);
+        usuario.setUpdatedAt();
 
         usuarioDao.update(usuario);
     }

@@ -5,6 +5,7 @@ import entities.Producto;
 import exceptions.StringInvalidException;
 import menu.MainCategoria;
 import menu.MainProducto;
+import menu.MainUsuario;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -107,7 +108,8 @@ public class Utilidades {
                 case 3:
                     System.out.println("=== USUARIOS ===");
                     mostrarSubopcionesMenu(sc);
-
+                    subOpcion = leerInt(sc);
+                    MainUsuario.menuUsuario(subOpcion, sc);
                     continue;
 
                 case 4:

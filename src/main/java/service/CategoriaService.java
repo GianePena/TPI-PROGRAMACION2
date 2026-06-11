@@ -16,6 +16,11 @@ public class CategoriaService {
     public List<Categoria>listarCategorias(){
         return dao.listar();
     }
+
+    public Categoria buscarPorId(Long id){
+        return dao.buscarPorId(id);
+    }
+
     public Long agregarCategoria(String nombre, String descripcion) throws CategoriaExistenteException,StringInvalidException{
         Categoria existente=dao.buscarPorNombre(nombre);
         if(existente!=null){
@@ -24,6 +29,7 @@ public class CategoriaService {
         Categoria categoria=new Categoria(nombre, descripcion);
         return dao.guardar(categoria);
     }
+    /*
     public Long actualizarCategoria(Long id, String atributo, String valor)throws CategoriaNoEncontradaException, StringInvalidException,IllegalArgumentException{
         Categoria categoria=dao.buscarPorId(id);
         if (categoria==null){
@@ -40,6 +46,16 @@ public class CategoriaService {
             default:
                 throw new StringInvalidException("Error atributo a modificar invalido");
         }
+    }*/
+    public Long actualizarCategoria(Long id, String nombre, String descripcion)throws CategoriaNoEncontradaException, StringInvalidException,IllegalArgumentException{
+        Categoria categoria=dao.buscarPorId(id);
+        if (categoria==null){
+            throw new CategoriaNoEncontradaException("Error categoria no encontrada");
+        }
+        categoria.setUpdatedAt();
+        categoria.setNombre(nombre);
+        categoria.setDescripcion(descripcion);
+        return dao.actualizar(categoria);
     }
 
     public Long eliminarCategoria(Long id)throws CategoriaNoEncontradaException{

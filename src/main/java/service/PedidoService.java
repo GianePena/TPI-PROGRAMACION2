@@ -1,4 +1,4 @@
-package service;
+/*package service;
 
 import dao.PedidoDao;
 import dao.UsuarioDao;
@@ -65,4 +65,4 @@ public class PedidoService {
         buscarPorId(id);
         pedidoDao.eliminar(id);
     }
-}
+}*/

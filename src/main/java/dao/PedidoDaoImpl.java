@@ -1,4 +1,4 @@
-package dao;
+/*package dao;
 
 import config.HikariConnection;
 import entities.Categoria;
@@ -276,3 +276,4 @@ public class PedidoDaoImpl implements PedidoDao {
 
 
 }
+*/

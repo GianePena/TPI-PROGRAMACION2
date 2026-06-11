@@ -13,7 +13,7 @@ public class Usuario extends Base {
     private Rol rol;
 
 
-    public Usuario(String nombre, String apellido, String mail, String celular, Rol rol) {
+    public Usuario(String nombre, String apellido, String mail, String celular,String contrasenia, Rol rol) {
         super();
         this.setNombre(nombre);
         this.setApellido(apellido);
@@ -22,19 +22,17 @@ public class Usuario extends Base {
         this.setContrasenia(contrasenia);
         this.setRol(rol);
     }
+
 
     public Usuario(Long id, boolean eliminado, LocalDateTime createdAt, String nombre, String apellido, String mail, String celular, String contrasenia, Rol rol) {
         super(id, eliminado, createdAt);
+        this.id=id;
         this.setNombre(nombre);
         this.setApellido(apellido);
         this.setMail(mail);
         this.setCelular(celular);
         this.setContrasenia(contrasenia);
         this.setRol(rol);
-    }
-
-    public Usuario(String trim, String trimmed, String s, String string, String trim1, Rol rol) {
-        super();
     }
 
     public String getNombre() {

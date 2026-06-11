@@ -4,15 +4,17 @@ import config.HikariConnection;
 import entities.Usuario;
 import enums.Rol;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import utilidades.Utilidades;
 
 public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public Long save(Usuario usuario) {
-        String sql = "INSERT INTO usuarios (nombre, apellido, mail, celular, contrasenia, rol, eliminado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuarios (nombre, apellido, mail, celular, contrasenia, rol, eliminado, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -23,12 +25,15 @@ public class UsuarioDaoImpl implements UsuarioDao {
             ps.setString(5, usuario.getContrasenia());
             ps.setString(6, usuario.getRol().name());
             ps.setBoolean(7, usuario.isEliminado());
+            ps.setTimestamp(8, Timestamp.valueOf(usuario.getCreatedAt()));
 
             ps.executeUpdate();
 
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    return rs.getLong(1);
+                    Long id= rs.getLong(1);
+                    usuario.setId(id);
+                    return id;
                 }
             }
         } catch (SQLException e) {
@@ -39,7 +44,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public void update(Usuario usuario) {
-        String sql = "UPDATE usuarios SET nombre = ?, apellido = ?, mail = ?, celular = ?, contrasenia = ?, rol = ?, eliminado = ? WHERE id = ?";
+        String sql = "UPDATE usuarios SET nombre = ?, apellido = ?, mail = ?, celular = ?, contrasenia = ?, rol = ?, eliminado = ?, updated_at = ? WHERE id = ?";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -50,7 +55,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
             ps.setString(5, usuario.getContrasenia());
             ps.setString(6, usuario.getRol().name());
             ps.setBoolean(7, usuario.isEliminado());
-            ps.setLong(8, usuario.getId());
+            ps.setTimestamp(8, Timestamp.valueOf(usuario.getUpdatedAt()));
+            ps.setLong(9, usuario.getId());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -115,11 +121,13 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public void delete(Long id) {
-        String sql = "UPDATE usuarios SET eliminado = TRUE WHERE id = ?";
+        String sql = "UPDATE usuarios SET eliminado =TRUE, deleted_at=? WHERE id = ?";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setLong(1, id);
+            ps.setTimestamp(1, Timestamp.valueOf(Utilidades.generarFecha()));
+            ps.setLong(2, id);
+
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar usuario: " + e.getMessage(), e);
@@ -133,23 +141,30 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     private Usuario mapearUsuario(ResultSet rs) throws SQLException {
 
+        Long id = rs.getLong("id");
+        boolean eliminado = rs.getBoolean("eliminado");
+
         String nombre = rs.getString("nombre");
         String apellido = rs.getString("apellido");
         String mail = rs.getString("mail");
         String celular = rs.getString("celular");
         String contrasenia = rs.getString("contrasenia");
         Rol rol = Rol.valueOf(rs.getString("rol"));
-
-        Usuario usuario = new Usuario(nombre, apellido, mail, celular, contrasenia, rol);
-
-        usuario.setId(rs.getLong("id"));
-        usuario.setEliminado(rs.getBoolean("eliminado"));
-
-        Timestamp timestamp = rs.getTimestamp("created_at");
-        if (timestamp != null) {
-            usuario.setCreatedAt(timestamp.toLocalDateTime());
+        LocalDateTime createdAt = null;
+        Timestamp ts = rs.getTimestamp("created_at");
+        if (ts != null) {
+            createdAt = ts.toLocalDateTime();
         }
-
-        return usuario;
+        return new Usuario(
+                id,
+                eliminado,
+                createdAt,
+                nombre,
+                apellido,
+                mail,
+                celular,
+                contrasenia,
+                rol
+        );
     }
 }

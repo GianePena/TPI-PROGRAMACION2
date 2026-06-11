@@ -61,18 +61,22 @@ public class MainCategoria {
         }
 
     }
+
     private static void editarCategoria(Scanner sc){
         try {
+            System.out.println("\n--- EDITAR CATEGORIA ---");
+            listarCategorias();
             System.out.print("ID de la categoria a editar: ");
             Long id = Utilidades.leerLong(sc);
 
-            System.out.println("Atributo a modificar (nombre || descripcion): ");
-            String atributo = Utilidades.leerString(sc);
+            System.out.print("Nuevo nombre de categoria: ");
+            String nombre = Utilidades.leerString(sc);
 
-            System.out.print("Nuevo valor: ");
-            String nuevoValor = Utilidades.leerString(sc);
+            System.out.print("Nueva descripcion: ");
+            String descirpcion = Utilidades.leerString(sc);
 
-            Long idActualizado = service.actualizarCategoria(id, atributo, nuevoValor);
+
+            Long idActualizado = service.actualizarCategoria(id, nombre, descirpcion);
             System.out.println("Categoria actualizada. ID: " + idActualizado);
 
         } catch (CategoriaNoEncontradaException | StringInvalidException | IllegalArgumentException e) {
