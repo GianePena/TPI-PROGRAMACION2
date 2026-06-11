@@ -49,7 +49,8 @@ public class MainProducto {
         if (productos.isEmpty()) {
             System.out.println("No hay productos cargados");
         } else {
-            Utilidades.mostrarListaProductos(productos);
+            Utilidades.mostrarLista(productos);
+            //Utilidades.mostrarListaProductos(productos);
         }
     }
 
@@ -75,7 +76,8 @@ public class MainProducto {
             String imagen = Utilidades.leerString(sc);
 
             System.out.println("=== CATEGORIAS DISPONIBLES ===");
-            Utilidades.mostrarListaCategoria(categoriaService.listarCategorias());
+            Utilidades.mostrarLista(categoriaService.listarCategorias());
+            //Utilidades.mostrarListaCategoria(categoriaService.listarCategorias());
 
             System.out.print("ID Categoria: ");
             Long idCategoria = Utilidades.leerLong(sc);
@@ -115,7 +117,7 @@ public class MainProducto {
     private static void editarProducto(Scanner sc) {
 
         try {
-
+            System.out.println("\n--- EDITAR PRODUCTO ---");
             System.out.print("ID del producto a editar: ");
             Long id = Utilidades.leerLong(sc);
 
@@ -154,7 +156,7 @@ public class MainProducto {
     private static void eliminarProducto(Scanner sc) {
 
         try {
-
+            System.out.println("--- ELIMINAR PRODUCTO ---");
             System.out.print("ID del producto a eliminar: ");
             Long id = Utilidades.leerLong(sc);
 

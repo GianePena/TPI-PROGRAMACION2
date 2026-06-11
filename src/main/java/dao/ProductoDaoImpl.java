@@ -14,7 +14,7 @@ public class ProductoDaoImpl implements ProductoDao {
     public Long guardar(Producto p) {
 
         String sql = """ 
-                INSERT INTO producto
+                INSERT INTO productos
                 (nombre, precio, descripcion, stock, imagen,
                  disponible, categoria_id, eliminado, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -66,7 +66,7 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM producto
+                FROM productos
                 WHERE eliminado = false
                 """;
 
@@ -85,18 +85,7 @@ public class ProductoDaoImpl implements ProductoDao {
                         new CategoriaDaoImpl()
                                 .buscarPorId(rs.getLong("categoria_id"));
 
-                Producto producto = new Producto(
-                        rs.getLong("id"),
-                        rs.getBoolean("eliminado"),
-                        rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getString("nombre"),
-                        rs.getDouble("precio"),
-                        rs.getString("descripcion"),
-                        rs.getInt("stock"),
-                        rs.getString("imagen"),
-                        rs.getBoolean("disponible"),
-                        categoria
-                );
+                Producto producto = mapearProducto(rs, categoria);
 
                 productos.add(producto);
             }
@@ -113,7 +102,7 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM producto
+                FROM productos
                 WHERE nombre = ?
                 AND eliminado = false
                 """;
@@ -133,18 +122,7 @@ public class ProductoDaoImpl implements ProductoDao {
                             new CategoriaDaoImpl()
                                     .buscarPorId(rs.getLong("categoria_id"));
 
-                    return new Producto(
-                            rs.getLong("id"),
-                            rs.getBoolean("eliminado"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getString("nombre"),
-                            rs.getDouble("precio"),
-                            rs.getString("descripcion"),
-                            rs.getInt("stock"),
-                            rs.getString("imagen"),
-                            rs.getBoolean("disponible"),
-                            categoria
-                    );
+                    return mapearProducto(rs,categoria);
                 }
             }
 
@@ -160,7 +138,7 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM producto
+                FROM productos
                 WHERE id = ?
                 AND eliminado = false
                 """;
@@ -180,18 +158,7 @@ public class ProductoDaoImpl implements ProductoDao {
                             new CategoriaDaoImpl()
                                     .buscarPorId(rs.getLong("categoria_id"));
 
-                    return new Producto(
-                            rs.getLong("id"),
-                            rs.getBoolean("eliminado"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getString("nombre"),
-                            rs.getDouble("precio"),
-                            rs.getString("descripcion"),
-                            rs.getInt("stock"),
-                            rs.getString("imagen"),
-                            rs.getBoolean("disponible"),
-                            categoria
-                    );
+                    return mapearProducto(rs, categoria);
                 }
             }
 
@@ -206,7 +173,7 @@ public class ProductoDaoImpl implements ProductoDao {
     public Long actualizar(Producto p) {
 
         String sql = """
-                UPDATE producto
+                UPDATE productos
                 SET nombre = ?,
                     precio = ?,
                     descripcion = ?,
@@ -249,11 +216,10 @@ public class ProductoDaoImpl implements ProductoDao {
     public Long eliminar(Producto p) {
 
         String sql = """
-                UPDATE producto
+                UPDATE productos
                 SET eliminado = true
                 WHERE id = ?
                 """;
-
         try (
                 Connection con = HikariConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)
@@ -272,5 +238,18 @@ public class ProductoDaoImpl implements ProductoDao {
         } catch (Exception e) {
             throw new RuntimeException("Error al eliminar producto", e);
         }
+    }
+    private Producto mapearProducto(ResultSet rs, Categoria categoria)throws SQLException{
+        return new Producto(
+                rs.getLong("id"),
+                rs.getBoolean("eliminado"),
+                rs.getTimestamp("created_at").toLocalDateTime(),
+                rs.getString("nombre"),
+                rs.getDouble("precio"),
+                rs.getString("descripcion"),
+                rs.getInt("stock"),
+                rs.getString("imagen"),
+                rs.getBoolean("disponible"),
+                categoria);
     }
 }

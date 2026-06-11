@@ -4,11 +4,12 @@ import dao.UsuarioDao;
 import dao.UsuarioDaoImpl;
 import entities.Usuario;
 import enums.Rol;
+import exceptions.StringInvalidException;
 import exceptions.UsuarioExistenteException;
-import utilidades.Utilidades;
+
 
 import java.util.List;
-import java.util.Optional;
+
 
 public class UsuarioService {
     private final UsuarioDao usuarioDao;
@@ -40,15 +41,15 @@ public class UsuarioService {
         if (rol == null) {
             throw new IllegalArgumentException("El rol no puede ser nulo");
         }
-        if (usuarioDao.existsByMail(mail)) {
+      /*  if (usuarioDao.existsByMail(mail)) {
             throw new UsuarioExistenteException(mail);
-        }
+        }*/
 
         Usuario usuario = new Usuario(nombre.trim(), apellido.trim(), mail.trim(), celular.trim(), contrasenia.trim(), rol);
-        return usuarioDao.save(usuario);
+        return usuarioDao.guardar(usuario);
     }
 
-    public void updateUsuario(Long id, String nombre, String apellido, String mail, String celular, String contrasenia, Rol rol) {
+   /* public void updateUsuario(Long id, String nombre, String apellido, String mail, String celular, String contrasenia, Rol rol) {
         Optional<Usuario> optionalUsuario = usuarioDao.findById(id);
 
         if (optionalUsuario.isEmpty()) {
@@ -69,24 +70,66 @@ public class UsuarioService {
         usuario.setUpdatedAt();
 
         usuarioDao.update(usuario);
-    }
+    }*/
+   public Long updateUsuario(Long id, String atributo, String valor)throws StringInvalidException {
+       Usuario usuario = usuarioDao.buscarPorId(id);
+       if(usuario==null){
+           throw new UsuarioExistenteException("Usuario con id " + id + " no existe");
+       }
+       usuario.setUpdatedAt();
+       switch (atributo.toLowerCase()){
+           case "nombre":
+               usuario.setNombre(valor);
+               return usuarioDao.actualizar(usuario);
+           case "apellido":
+               usuario.setApellido(valor);
+               return usuarioDao.actualizar(usuario);
+           case "mail":
+               usuario.setMail(valor);
+               return usuarioDao.actualizar(usuario);
+           case "celular":
+               usuario.setCelular(valor);
+               return usuarioDao.actualizar(usuario);
+           case "contraseña":
+               usuario.setContrasenia(valor);
+               return usuarioDao.actualizar(usuario);
+           case "rol":
+               if(valor.equals("admin")){
+                   usuario.setRol(Rol.ADMIN);
+               }else{
+                   usuario.setRol(Rol.USUARIO);
+               }
+               return usuarioDao.actualizar(usuario);
+           default:
+               throw new StringInvalidException(
+                       "Error: atributo a modificar inválido"
+               );
+       }
 
-    public void deleteUsuario(Long id) {
-        Optional<Usuario> optionalUsuario = usuarioDao.findById(id);
+   }
 
-        if (optionalUsuario.isEmpty()) {
+    public Long deleteUsuario(Long id) {
+        //Optional<Usuario> optionalUsuario = usuarioDao.findById(id);
+        Usuario usuario= usuarioDao.buscarPorId(id);
+        if(usuario==null){
             throw new RuntimeException("El usuario con id " + id + " no existe");
         }
-        usuarioDao.delete(id);
+
+        /*if (optionalUsuario.isEmpty()) {
+            throw new RuntimeException("El usuario con id " + id + " no existe");
+        }*/
+        usuario.setDeletedAt();
+        usuario.setEliminado(true);
+        return usuarioDao.eliminar(usuario);
     }
 
     public List<Usuario> listarUsuarios() {
-        return usuarioDao.findAll();
+        return usuarioDao.listar();
     }
 
-    public Optional<Usuario> buscarPorId(Long id) {
+   /* public Optional<Usuario> buscarPorId(Long id) {
         return usuarioDao.findById(id);
-    }
+    }*/
 }
 
 

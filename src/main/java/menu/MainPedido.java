@@ -27,21 +27,33 @@ import static utilidades.Utilidades.leerLong;
 //        this.usuarioService = usuarioService;
 //        this.scanner = scanner;
 //    }
-//    public void mostrar() {
-//        int opcion = 0;
-//        switch (opcion) {
-//            case 1 -> listar();
-//            case 2 -> listarPorUsuario();
-//            case 3 -> crear();
-//            case 4 -> actualizar();
-//            case 5 -> eliminar();
-//            case 0 -> {
-//            }
-//            default -> System.out.println("Opción inválida.");
-//        }
-//    }
 //
-//    private void listar() {
+ public static void menuPedido(int opcion, Scanner sc) {
+        switch (opcion) {
+            case 1:
+                listarPedidos();
+                break;
+
+            case 2:
+                listarPorUsuario(sc);
+                break;
+
+            case 3:
+                crearPedido(sc);
+                break;
+
+            case 4:
+                 actualizarPedido(sc);
+                break;
+            case 5:
+                 eliminarPedido(sc);
+                break;
+
+            default:
+                System.out.println("Opcion invalida. Ingrese una opcion del 1 al 4.");
+        }
+    }
+//    private void listarPedidos() {
 //        List<Pedido> lista = pedidoService.listar();
 //        if (lista.isEmpty()) {
 //            System.out.println("No hay pedido registrados.");
@@ -57,7 +69,7 @@ import static utilidades.Utilidades.leerLong;
 //        try {
 //            usuarioService.listar().forEach(System.out::println);
 //            System.out.println("ID de usuario: ");
-//            Long uid = leerLong();
+//            Long uid = Utilidades.leerLong();
 //            List<Pedido> lista = pedidoService.listarPorUsuario(uid);
 //            if(lista.isEmpty()) System.out.println("No hay usuario para ese pedido.");
 //            else lista.forEach(p -> {
@@ -69,16 +81,16 @@ import static utilidades.Utilidades.leerLong;
 //        }
 //    }
 //
-//    private void crear() {
+//    private void crearPedido() {
 //        Pedido pedido = null;
 //        try {
 //            usuarioService.listar().forEach(System.out::println);
 //            System.out.println("ID de usuario: ");
-//            Long uid = leerLong();
+//            Long uid = Utilidades.leerLong();
 //
 //            System.out.println("Forma de pago: 1=TARJETA  2=TRANSFERENCIA  3=EFECTIVO");
 //            System.out.print("Seleccione: ");
-//            FormaPago fp = seleccionarFormaPago(leerInt());
+//            FormaPago fp = seleccionarFormaPago(Utilidades.leerInt());
 //
 //            pedido = pedidoService.iniciarPedido(uid, fp);
 //
@@ -86,12 +98,12 @@ import static utilidades.Utilidades.leerLong;
 //            while (agregraMas) {
 //                productoService.listar().forEach(System.out::println);
 //                System.out.print("ID de producto (0 para terminar): ");
-//                Long pid = leerLong();
+//                Long pid = Utilidades.leerLong();
 //                if (pid == 0) break;
 //
 //                Producto producto = productoService.buscarPorId(pid);
 //                System.out.print("Cantidad: ");
-//                int cantidad = leerInt();
+//                int cantidad = Utilidades.leerInt();
 //                pedidoService.agregarDetalle(pedido, producto, cantidad);
 //                System.out.println("Detalle agregado. Subtotal parcial: $\"" + pedido.getTotal());
 //
@@ -107,17 +119,17 @@ import static utilidades.Utilidades.leerLong;
 //        }
 //    }
 //
-//    private void actualizar() {
+//    private void actualizarPedido() {
 //        try {
 //            listar();
 //            System.out.print("ID de pedido a actualizar: ");
-//            Long id = leerLong();
+//            Long id = Utilidades.leerLong();
 //
 //            System.out.println("Nuevo estado: (0=sin cambio 1=PENDIENTE  2=CONFIRMADO  3=TERMINADO  4=CANCELADO):");
-//            Estado estado = seleccionarEstado(leerInt());
+//            Estado estado = seleccionarEstado(Utilidades.leerInt());
 //
 //            System.out.println("Nueva forma de pago (0=sin cambio 1=TARJETA 2=TRANSFERENCIA 3=EFECTIVO):");
-//            FormaPago fp = seleccionarFormaPago(leerInt());
+//            FormaPago fp = seleccionarFormaPago(Utilidades.leerInt());
 //
 //            pedidoService.actualizarEstadoYPago(id, estado, fp);
 //            System.out.println("Pedido actualizado.");
@@ -127,11 +139,11 @@ import static utilidades.Utilidades.leerLong;
 //        }
 //    }
 //
-//    private void eliminar() {
+//    private void eliminarPedido() {
 //        try {
 //            listar();
 //            System.out.print("ID de pedido a eliminar: ");
-//            Long id = leerLong();
+//            Long id = Utilidades.leerLong();
 //            System.out.print("¿Confirmar eliminación? (S/N): ");
 //            if (scanner.nextLine().trim().equalsIgnoreCase("S")) {
 //                pedidoService.eliminar(id);
@@ -163,15 +175,7 @@ import static utilidades.Utilidades.leerLong;
 //        };
 //    }
 //
-//    private int leerInt() {
-//        try { return Integer.parseInt(scanner.nextLine().trim()); }
-//        catch (NumberFormatException e) { return -1; }
-//    }
-//
-//    private Long leerLong() {
-//        try { return Long.parseLong(scanner.nextLine().trim()); }
-//        catch (NumberFormatException e) { return -1L; }
-//    }
+
 //}
 
 */

@@ -231,7 +231,7 @@ Actualmente se encuentran implementadas las capas principales del sistema y la e
 
 ## Autores
 
-Agustina Fontagnol, Gianela Peña, Martina Suarez y Yoselie Aquino
+Agustina Fontagnol, Gianella Peña, Martina Suarez y Yoselie Aquino
 
 Tecnicatura Universitaria en Programación.
 Programación II.

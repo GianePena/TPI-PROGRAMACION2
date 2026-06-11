@@ -13,7 +13,7 @@ import utilidades.Utilidades;
 public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
-    public Long save(Usuario usuario) {
+    public Long guardar(Usuario usuario) {
         String sql = "INSERT INTO usuarios (nombre, apellido, mail, celular, contrasenia, rol, eliminado, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -43,11 +43,10 @@ public class UsuarioDaoImpl implements UsuarioDao {
     }
 
     @Override
-    public void update(Usuario usuario) {
+    public Long actualizar(Usuario usuario) {
         String sql = "UPDATE usuarios SET nombre = ?, apellido = ?, mail = ?, celular = ?, contrasenia = ?, rol = ?, eliminado = ?, updated_at = ? WHERE id = ?";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getApellido());
             ps.setString(3, usuario.getMail());
@@ -59,11 +58,16 @@ public class UsuarioDaoImpl implements UsuarioDao {
             ps.setLong(9, usuario.getId());
 
             ps.executeUpdate();
+            int filasAfectadas=ps.executeUpdate();
+            if (filasAfectadas>0) {
+                return usuario.getId();
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException("Error al actualizar usuario: " + e.getMessage(), e);
         }
     }
-
+    /*
     @Override
     public Optional<Usuario> findById(Long id) {
         String sql = "SELECT * FROM usuarios WHERE id = ?";
@@ -81,10 +85,28 @@ public class UsuarioDaoImpl implements UsuarioDao {
             throw new RuntimeException("Error al buscar usuario por ID: " + e.getMessage(), e);
         }
         return Optional.empty();
+    }*/
+    @Override
+    public Usuario buscarPorId(Long id) {
+        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        try (Connection conn = HikariConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapearUsuario(rs);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al buscar usuario por ID: " + e.getMessage(), e);
+        }
+        return null;
     }
 
     @Override
-    public List<Usuario> findAll() {
+    public List<Usuario> listar() {
         String sql = "SELECT * FROM usuarios WHERE eliminado = FALSE";
         List<Usuario> usuarios = new ArrayList<>();
         try (Connection conn = HikariConnection.getConnection();
@@ -100,8 +122,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return usuarios;
     }
 
-    @Override
-    public Optional<Usuario> findByMail(String mail) {
+   /* @Override
+    public Optional<Usuario> buscarPorEmail(String mail) {
         String sql = "SELECT * FROM usuarios WHERE mail = ?";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -117,27 +139,32 @@ public class UsuarioDaoImpl implements UsuarioDao {
             throw new RuntimeException("Error al buscar usuario por mail: " + e.getMessage(), e);
         }
         return Optional.empty();
-    }
+    }*/
+
 
     @Override
-    public void delete(Long id) {
+    public Long eliminar(Usuario usuario) {
         String sql = "UPDATE usuarios SET eliminado =TRUE, deleted_at=? WHERE id = ?";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setTimestamp(1, Timestamp.valueOf(Utilidades.generarFecha()));
-            ps.setLong(2, id);
+            ps.setLong(2, usuario.getId());
 
-            ps.executeUpdate();
+            int filasAfectadas=ps.executeUpdate();
+            if (filasAfectadas>0) {
+                return usuario.getId();
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException("Error al eliminar usuario: " + e.getMessage(), e);
         }
     }
 
-    @Override
-    public boolean existsByMail(String mail) {
-        return findByMail(mail).isPresent();
-    }
+   // @Override
+    //public boolean existsByMail(String mail) {
+    //    return findByMail(mail).isPresent();
+    //}
 
     private Usuario mapearUsuario(ResultSet rs) throws SQLException {
 

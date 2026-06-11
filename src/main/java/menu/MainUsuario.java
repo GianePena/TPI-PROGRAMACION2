@@ -36,7 +36,7 @@ public class MainUsuario {
     }
 
     private static void listarUsuarios() {
-        System.out.println("\n--- LISTADO DE USUARIOS ---");
+        System.out.println("\n=== LISTADO DE USUARIOS ===");
         List<Usuario> lista = usuarioService.listarUsuarios();
 
         if (lista.isEmpty()) {
@@ -49,7 +49,7 @@ public class MainUsuario {
     }
 
     private static void crearUsuario(Scanner sc) {
-        System.out.println("\n--- CREAR USUARIO ---");
+        System.out.println("\n=== CREAR USUARIO ===");
 
         System.out.print("Nombre: ");
         String nombre = Utilidades.leerString(sc);
@@ -77,9 +77,29 @@ public class MainUsuario {
             System.out.println("Error: " + e.getMessage());
         }
     }
-
     private static void editarUsuario(Scanner sc) {
-        System.out.println("\n--- EDITAR USUARIO ---");
+        System.out.println("\n=== EDITAR USUARIO ===");
+        listarUsuarios();
+
+        System.out.print("ID del usuario a editar: ");
+        Long id = Utilidades.leerLong(sc);
+
+        System.out.print("Ingrese el atributo a modificar( NOMBRE | APELLIDO | MAIL | CELULAR | CONTRASEÑA) : ");
+        String atributo= Utilidades.leerString(sc);
+
+        System.out.print("Nuevo valor: ");
+        String valor = Utilidades.leerString(sc);
+
+        try {
+            Long idActualizado= usuarioService.updateUsuario(id, atributo,valor);
+            System.out.println("Usuario actualizada. ID: " + idActualizado);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    /*private static void editarUsuario(Scanner sc) {
+        System.out.println("\n=== EDITAR USUARIO ===");
         listarUsuarios();
 
         System.out.print("ID del usuario a editar: ");
@@ -121,10 +141,10 @@ public class MainUsuario {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-    }
+    }*/
 
     private static void eliminarUsuario(Scanner sc) {
-        System.out.println("\n--- ELIMINAR USUARIO ---");
+        System.out.println("\n=== ELIMINAR USUARIO ===");
         listarUsuarios();
 
         System.out.print("ID del usuario a eliminar: ");

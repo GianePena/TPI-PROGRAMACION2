@@ -76,8 +76,72 @@ public class ProductoService {
 
         return dao.guardar(producto);
     }
+    public Long actualizarProducto(Long id, String atributo, String valor) throws ProductoNoEncontradoException, StringInvalidException {
 
-    public Long actualizarProducto(
+        Producto producto = dao.buscarPorId(id);
+        if (producto == null) {
+            throw new ProductoNoEncontradoException(
+                    "Error: producto no encontrado"
+            );
+        }
+        producto.setUpdatedAt();
+
+        switch (atributo.toLowerCase()) {
+
+            case "nombre":
+                if (valor == null || valor.isBlank()) {
+                    throw new StringInvalidException(
+                            "Error: nombre inválido"
+                    );
+                }
+                producto.setNombre(valor);
+                return dao.actualizar(producto);
+
+            case "descripcion":
+
+                producto.setDescripcion(valor);
+                return dao.actualizar(producto);
+
+            case "imagen":
+
+                producto.setImagen(valor);
+                return dao.actualizar(producto);
+
+            case "precio":
+
+                double precio = Double.parseDouble(valor);
+
+                if (precio < 0) {
+                    throw new IllegalArgumentException(
+                            "Error: el precio no puede ser negativo"
+                    );
+                }
+
+                producto.setPrecio(precio);
+                return dao.actualizar(producto);
+
+            case "stock":
+
+                int stock = Integer.parseInt(valor);
+
+                if (stock < 0) {
+                    throw new IllegalArgumentException(
+                            "Error: el stock no puede ser negativo"
+                    );
+                }
+
+                producto.setStock(stock);
+                return dao.actualizar(producto);
+
+            default:
+                throw new StringInvalidException(
+                        "Error: atributo a modificar inválido"
+                );
+        }
+    }
+
+
+  /*  public Long actualizarProducto(
             Long id,
             String atributo,
             String valor
@@ -147,7 +211,7 @@ public class ProductoService {
                         "Error: atributo a modificar inválido"
                 );
         }
-    }
+    }*/
 
     public Long actualizarCategoriaProducto(
             Long idProducto,

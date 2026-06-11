@@ -68,12 +68,7 @@ public class Base {
     @Override
     public String toString() {
         return
-                "| ID: " + id +
-                 (this.eliminado==true?"- eliminado=" + eliminado:"") +
-                 (this.createdAt!=null?"- createdAt=" + createdAt:"") +
-                (this.updatedAt!=null?"- updatedAt=" + updatedAt :"" )+
-                (this.deletedAt!=null?"- deletedAt=" + deletedAt :"" );
-
+                "| ID: " + id ;
     }
 
 }
