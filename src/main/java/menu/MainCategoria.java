@@ -3,6 +3,7 @@ package menu;
 import entities.Categoria;
 import exceptions.CategoriaExistenteException;
 import exceptions.CategoriaNoEncontradaException;
+import exceptions.IdInvalidException;
 import exceptions.StringInvalidException;
 import service.CategoriaService;
 import utilidades.Utilidades;
@@ -41,7 +42,6 @@ public class MainCategoria {
         if(categorias.isEmpty()){
             System.out.println("No hay categorías cargadas");
         }else{
-            //Utilidades.mostrarListaCategoria(categorias);
             Utilidades.mostrarLista(categorias);
         }
     }
@@ -80,7 +80,7 @@ public class MainCategoria {
             Long idActualizado = service.actualizarCategoria(id, atributo, valor);
             System.out.println("Categoria actualizada. ID: " + idActualizado);
 
-        } catch (CategoriaNoEncontradaException | StringInvalidException | IllegalArgumentException e) {
+        } catch (CategoriaNoEncontradaException | StringInvalidException | IllegalArgumentException | IdInvalidException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -100,7 +100,7 @@ public class MainCategoria {
             Long idEliminado = service.eliminarCategoria(id);
             System.out.println("Categoria eliminada. ID: " + idEliminado);
 
-        } catch (CategoriaNoEncontradaException e) {
+        } catch (CategoriaNoEncontradaException | IdInvalidException e) {
             System.out.println(e.getMessage());
         }
     }

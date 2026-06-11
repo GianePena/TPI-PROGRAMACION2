@@ -6,12 +6,9 @@ import java.util.Optional;
 
 public interface UsuarioDao {
     Long guardar(Usuario usuario);
-   // void update(Usuario usuario);
     Long actualizar(Usuario usuario);
-    //Optional<Usuario> findById(Long id);
     Usuario buscarPorId(Long id);
     List<Usuario> listar();
-    //Optional<Usuario> findByMail(String mail);
+    boolean existeEmail(String mail);
     Long eliminar(Usuario usuario);
-    //boolean existsByMail(String mail);
 }

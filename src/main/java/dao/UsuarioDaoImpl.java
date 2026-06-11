@@ -7,7 +7,6 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import utilidades.Utilidades;
 
 public class UsuarioDaoImpl implements UsuarioDao {
@@ -67,25 +66,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
             throw new RuntimeException("Error al actualizar usuario: " + e.getMessage(), e);
         }
     }
-    /*
-    @Override
-    public Optional<Usuario> findById(Long id) {
-        String sql = "SELECT * FROM usuarios WHERE id = ?";
-        try (Connection conn = HikariConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setLong(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(mapearUsuario(rs));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al buscar usuario por ID: " + e.getMessage(), e);
-        }
-        return Optional.empty();
-    }*/
     @Override
     public Usuario buscarPorId(Long id) {
         String sql = "SELECT * FROM usuarios WHERE id = ?";
@@ -122,24 +103,23 @@ public class UsuarioDaoImpl implements UsuarioDao {
         return usuarios;
     }
 
-   /* @Override
-    public Optional<Usuario> buscarPorEmail(String mail) {
+    @Override
+    public boolean existeEmail(String mail) {
         String sql = "SELECT * FROM usuarios WHERE mail = ?";
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
-
             ps.setString(1, mail);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return Optional.of(mapearUsuario(rs));
+                    return true;
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Error al buscar usuario por mail: " + e.getMessage(), e);
         }
-        return Optional.empty();
-    }*/
+        return false;
+    }
 
 
     @Override
@@ -161,10 +141,6 @@ public class UsuarioDaoImpl implements UsuarioDao {
         }
     }
 
-   // @Override
-    //public boolean existsByMail(String mail) {
-    //    return findByMail(mail).isPresent();
-    //}
 
     private Usuario mapearUsuario(ResultSet rs) throws SQLException {
 

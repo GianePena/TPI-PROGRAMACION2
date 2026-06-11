@@ -2,11 +2,14 @@ package menu;
 
 import entities.Usuario;
 import enums.Rol;
+import exceptions.IdInvalidException;
+import exceptions.StringInvalidException;
+import exceptions.UsuarioExistenteException;
+import exceptions.UsuarioNoEncontradoException;
 import service.UsuarioService;
 import utilidades.Utilidades;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 public class MainUsuario {
@@ -73,7 +76,7 @@ public class MainUsuario {
         try {
             Long id = usuarioService.createUsuario(nombre, apellido, mail, celular, contrasenia, rol);
             System.out.println("Usuario creado con ID: " + id);
-        } catch (Exception e) {
+        } catch (StringInvalidException | UsuarioExistenteException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -93,62 +96,17 @@ public class MainUsuario {
         try {
             Long idActualizado= usuarioService.updateUsuario(id, atributo,valor);
             System.out.println("Usuario actualizada. ID: " + idActualizado);
-        } catch (Exception e) {
+        } catch ( StringInvalidException | IdInvalidException | UsuarioNoEncontradoException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
-
-    /*private static void editarUsuario(Scanner sc) {
-        System.out.println("\n=== EDITAR USUARIO ===");
-        listarUsuarios();
-
-        System.out.print("ID del usuario a editar: ");
-        Long id = (long) Utilidades.leerInt(sc);
-
-        Optional<Usuario> opt = usuarioService.buscarPorId(id);
-        if (opt.isEmpty()) {
-            System.out.println("Usuario no encontrado.");
-            return;
-        }
-
-        Usuario u = opt.get();
-        System.out.println("Editando: " + u.getNombre() + " " + u.getApellido());
-
-        System.out.print("Nuevo nombre [" + u.getNombre() + "]: ");
-        String nombre = Utilidades.leerString(sc);
-        if (!nombre.isEmpty()) u.setNombre(nombre);
-
-        System.out.print("Nuevo apellido [" + u.getApellido() + "]: ");
-        String apellido = Utilidades.leerString(sc);
-        if (!apellido.isEmpty()) u.setApellido(apellido);
-
-        System.out.print("Nuevo mail [" + u.getMail() + "]: ");
-        String mail = Utilidades.leerString(sc);
-        if (!mail.isEmpty()) u.setMail(mail);
-
-        System.out.print("Nuevo celular [" + u.getCelular() + "]: ");
-        String celular = Utilidades.leerString(sc);
-        if (!celular.isEmpty()) u.setCelular(celular);
-
-        System.out.print("Nueva contrasenia: ");
-        String contrasenia = Utilidades.leerString(sc);
-        if (!contrasenia.isEmpty()) u.setContrasenia(contrasenia);
-
-        try {
-            usuarioService.updateUsuario(id, u.getNombre(), u.getApellido(), u.getMail(),
-                    u.getCelular(), u.getContrasenia(), u.getRol());
-            System.out.println("Usuario actualizado.");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }*/
 
     private static void eliminarUsuario(Scanner sc) {
         System.out.println("\n=== ELIMINAR USUARIO ===");
         listarUsuarios();
 
         System.out.print("ID del usuario a eliminar: ");
-        Long id = (long) Utilidades.leerInt(sc);
+        Long id = Utilidades.leerLong(sc);
 
         System.out.print("Confirmar eliminacion? (S/N): ");
         String confirm = Utilidades.leerString(sc);
@@ -157,7 +115,7 @@ public class MainUsuario {
             try {
                 usuarioService.deleteUsuario(id);
                 System.out.println("Usuario eliminado (baja logica).");
-            } catch (Exception e) {
+            } catch (IdInvalidException | UsuarioNoEncontradoException e) {
                 System.out.println("Error: " + e.getMessage());
             }
         } else {

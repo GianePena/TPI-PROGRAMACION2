@@ -2,6 +2,7 @@ package menu;
 
 import entities.Categoria;
 import entities.Producto;
+import exceptions.IdInvalidException;
 import exceptions.ProductoExistenteException;
 import exceptions.ProductoNoEncontradoException;
 import exceptions.StringInvalidException;
@@ -50,7 +51,6 @@ public class MainProducto {
             System.out.println("No hay productos cargados");
         } else {
             Utilidades.mostrarLista(productos);
-            //Utilidades.mostrarListaProductos(productos);
         }
     }
 
@@ -77,7 +77,6 @@ public class MainProducto {
 
             System.out.println("=== CATEGORIAS DISPONIBLES ===");
             Utilidades.mostrarLista(categoriaService.listarCategorias());
-            //Utilidades.mostrarListaCategoria(categoriaService.listarCategorias());
 
             System.out.print("ID Categoria: ");
             Long idCategoria = Utilidades.leerLong(sc);
@@ -147,7 +146,8 @@ public class MainProducto {
 
         } catch (ProductoNoEncontradoException |
                  StringInvalidException |
-                 IllegalArgumentException e) {
+                 IllegalArgumentException |
+                IdInvalidException e) {
 
             System.out.println(e.getMessage());
         }
@@ -175,7 +175,7 @@ public class MainProducto {
 
             System.out.println("Producto eliminado. ID: " + idEliminado);
 
-        } catch (ProductoNoEncontradoException e) {
+        } catch (ProductoNoEncontradoException | IdInvalidException e) {
 
             System.out.println(e.getMessage());
         }
