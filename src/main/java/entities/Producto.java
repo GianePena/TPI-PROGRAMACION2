@@ -1,5 +1,4 @@
 package entities;
-
 import java.time.LocalDateTime;
 
 public class Producto extends Base {
@@ -79,13 +78,14 @@ public class Producto extends Base {
     @Override
     public String toString() {
         return "PRODUCTO: " +
+                "\n" + super.toString() +
                 "\n| Nombre: " + nombre +
                 "\n| Precio: " + precio +
                 "\n| Descripción: " + descripcion +
                 "\n| Stock: " + stock +
                 "\n| Imagen: " + imagen +
                 "\n| Disponible: " + disponible +
-                "\n| Categoria: " + categoria.getNombre()+
-                "\n" + super.toString();
+                "\n| Categoria: " + categoria.getNombre();
     }
 }
+

@@ -36,10 +36,9 @@ public class DetallePedido extends Base{
 
     @Override
     public String toString() {
-        return "DetallePedido{" +
-                "cantidad=" + cantidad +
-                ", subtotal=" + subtotal +
-                ", producto=" + producto +
-                '}';
+        return "| DetallePedido: " +
+                "\n| Cantidad: " + cantidad +
+                "\n| Subtotal: " + subtotal +
+                "\n| Producto: " + producto;
     }
 }

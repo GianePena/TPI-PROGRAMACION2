@@ -15,12 +15,11 @@ public class HikariConnection {
         HikariConfig config = new HikariConfig();
 
         config.setJdbcUrl(
-                "jdbc:mysql://localhost:3306/foodStore" +
+                "jdbc:mysql://localhost:3306/foodstore" +
                         "?useSSL=false" +
                         "&serverTimezone=UTC" +
                         "&allowPublicKeyRetrieval=true"
         );
-
 
         config.setUsername("root");
         config.setPassword("");
@@ -30,9 +29,7 @@ public class HikariConnection {
         ds = new HikariDataSource(config);
     }
 
-    public static Connection getConnection()
-            throws SQLException {
-
+    public static Connection getConnection() throws SQLException {
         return ds.getConnection();
     }
 }

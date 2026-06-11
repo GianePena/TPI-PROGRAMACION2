@@ -68,9 +68,9 @@ public class Base {
     @Override
     public String toString() {
         return
-                "- id=" + id +
-                "- eliminado=" + eliminado +
-                "- createdAt=" + createdAt +
+                "| ID: " + id +
+                 (this.eliminado==true?"- eliminado=" + eliminado:"") +
+                 (this.createdAt!=null?"- createdAt=" + createdAt:"") +
                 (this.updatedAt!=null?"- updatedAt=" + updatedAt :"" )+
                 (this.deletedAt!=null?"- deletedAt=" + deletedAt :"" );
 
