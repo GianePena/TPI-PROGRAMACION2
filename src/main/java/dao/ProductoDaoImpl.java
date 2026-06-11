@@ -66,8 +66,11 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM producto
-                WHERE eliminado = false
+                FROM producto p
+                JOIN categoria c
+                ON c.id = p.categoria_id
+                WHERE p.eliminado = false
+                AND c.deleted_at = NULL;
                 """;
 
         List<Producto> productos = new ArrayList<>();

@@ -25,4 +25,8 @@ CREATE TABLE IF NOT EXISTS producto(
     updated_at  DATETIME DEFAULT NULL,
     deleted_at  DATETIME DEFAULT NULL,
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
     );
+
+-- metodo delete en cascada cuando borras al padre
