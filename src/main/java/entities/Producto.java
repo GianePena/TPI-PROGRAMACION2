@@ -77,8 +77,7 @@ public class Producto extends Base {
 
     @Override
     public String toString() {
-        return "PRODUCTO: " +
-                "\n" + super.toString() +
+        return "\nPRODUCTO " + super.toString() +
                 "\n| Nombre: " + nombre +
                 "\n| Precio: " + precio +
                 "\n| Descripción: " + descripcion +

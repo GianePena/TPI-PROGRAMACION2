@@ -2,8 +2,9 @@ package menu;
 
 import entities.Categoria;
 import entities.Producto;
-import exceptions.ProductoExistenteException;
-import exceptions.ProductoNoEncontradoException;
+import exceptions.EsExistenteException;
+import exceptions.IdInvalidException;
+import exceptions.NoEncontradoException;
 import exceptions.StringInvalidException;
 import service.CategoriaService;
 import service.ProductoService;
@@ -49,7 +50,7 @@ public class MainProducto {
         if (productos.isEmpty()) {
             System.out.println("No hay productos cargados");
         } else {
-            Utilidades.mostrarListaProductos(productos);
+            Utilidades.mostrarLista(productos);
         }
     }
 
@@ -75,7 +76,7 @@ public class MainProducto {
             String imagen = Utilidades.leerString(sc);
 
             System.out.println("=== CATEGORIAS DISPONIBLES ===");
-            Utilidades.mostrarListaCategoria(categoriaService.listarCategorias());
+            Utilidades.mostrarLista(categoriaService.listarCategorias());
 
             System.out.print("ID Categoria: ");
             Long idCategoria = Utilidades.leerLong(sc);
@@ -104,7 +105,7 @@ public class MainProducto {
 
             System.out.println("Producto creado con ID: " + id);
 
-        } catch (ProductoExistenteException |
+        } catch (EsExistenteException |
                  StringInvalidException |
                  IllegalArgumentException e) {
 
@@ -115,7 +116,7 @@ public class MainProducto {
     private static void editarProducto(Scanner sc) {
 
         try {
-
+            System.out.println("\n--- EDITAR PRODUCTO ---");
             System.out.print("ID del producto a editar: ");
             Long id = Utilidades.leerLong(sc);
 
@@ -143,9 +144,10 @@ public class MainProducto {
 
             System.out.println("Producto actualizado. ID: " + idActualizado);
 
-        } catch (ProductoNoEncontradoException |
+        } catch (NoEncontradoException |
                  StringInvalidException |
-                 IllegalArgumentException e) {
+                 IllegalArgumentException |
+                 IdInvalidException e) {
 
             System.out.println(e.getMessage());
         }
@@ -154,7 +156,7 @@ public class MainProducto {
     private static void eliminarProducto(Scanner sc) {
 
         try {
-
+            System.out.println("--- ELIMINAR PRODUCTO ---");
             System.out.print("ID del producto a eliminar: ");
             Long id = Utilidades.leerLong(sc);
 
@@ -173,7 +175,7 @@ public class MainProducto {
 
             System.out.println("Producto eliminado. ID: " + idEliminado);
 
-        } catch (ProductoNoEncontradoException e) {
+        } catch (NoEncontradoException | IdInvalidException e) {
 
             System.out.println(e.getMessage());
         }

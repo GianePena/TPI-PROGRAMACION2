@@ -1,9 +1,7 @@
 package menu;
 
 import entities.Categoria;
-import exceptions.CategoriaExistenteException;
-import exceptions.CategoriaNoEncontradaException;
-import exceptions.StringInvalidException;
+import exceptions.*;
 import service.CategoriaService;
 import utilidades.Utilidades;
 
@@ -41,46 +39,49 @@ public class MainCategoria {
         if(categorias.isEmpty()){
             System.out.println("No hay categorías cargadas");
         }else{
-            Utilidades.mostrarListaCategoria(categorias);
+            Utilidades.mostrarLista(categorias);
         }
     }
     private static void crearCategoria(Scanner sc){
-        System.out.println("=== CREAR CATEGORIA ===");
         try {
+            System.out.println("=== CREAR CATEGORIA ===");
             System.out.print("Nombre: ");
             String nombre = Utilidades.leerString(sc);
 
             System.out.print("Descripcion: ");
             String descripcion = Utilidades.leerString(sc);
 
-            Long id = service.agregarCategoria(nombre,descripcion);
+            Long id = service.agregarCategoria(nombre, descripcion);
             System.out.println("Categoria creada con ID: " + id);
-
-        }catch (CategoriaExistenteException | StringInvalidException e) {
-            System.out.println(e.getMessage());
+        } catch (StringInvalidException e) {
+            System.out.println("Categoria invalida. ");
         }
-
     }
+
     private static void editarCategoria(Scanner sc){
         try {
+            System.out.println("\n=== EDITAR CATEGORIA ===");
+            listarCategorias();
             System.out.print("ID de la categoria a editar: ");
             Long id = Utilidades.leerLong(sc);
 
-            System.out.println("Atributo a modificar (nombre || descripcion): ");
-            String atributo = Utilidades.leerString(sc);
+            System.out.print("Ingrese el atributo a modificar( NOMBRE | DESCRIPCION) : ");
+            String atributo= Utilidades.leerString(sc);
 
             System.out.print("Nuevo valor: ");
-            String nuevoValor = Utilidades.leerString(sc);
+            String valor = Utilidades.leerString(sc);
 
-            Long idActualizado = service.actualizarCategoria(id, atributo, nuevoValor);
+
+            Long idActualizado = service.actualizarCategoria(id, atributo, valor);
             System.out.println("Categoria actualizada. ID: " + idActualizado);
 
-        } catch (CategoriaNoEncontradaException | StringInvalidException | IllegalArgumentException e) {
+        } catch (NoEncontradoException | StringInvalidException | IllegalArgumentException | IdInvalidException e) {
             System.out.println(e.getMessage());
         }
     }
     private static void eliminarCategoria(Scanner sc){
         try {
+            System.out.println("\n=== ELIMINAR CATEGORIA ===");
             System.out.print("ID de la categoria a eliminar: ");
             Long id = Utilidades.leerLong(sc);
 
@@ -94,7 +95,7 @@ public class MainCategoria {
             Long idEliminado = service.eliminarCategoria(id);
             System.out.println("Categoria eliminada. ID: " + idEliminado);
 
-        } catch (CategoriaNoEncontradaException e) {
+        } catch (NoEncontradoException | IdInvalidException e) {
             System.out.println(e.getMessage());
         }
     }

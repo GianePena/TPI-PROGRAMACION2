@@ -10,14 +10,12 @@ public class Categoria extends Base{
     private String descripcion;
     private List<Producto> productos = new ArrayList<>();
 
-    // Constructor para una categoria nueva
     public Categoria(String nombre, String descripcion) {
         super();
         setNombre(nombre);
         setDescripcion(descripcion);
     }
 
-    // Constructor para reconstruir desde la DB
     public Categoria(Long id, boolean eliminado, LocalDateTime createdAt, String nombre, String descripcion) {
         super(id, eliminado, createdAt);
         setNombre(nombre);
@@ -30,14 +28,10 @@ public class Categoria extends Base{
         this.descripcion = "Sin descripcion";
     }
 
-    // Getters y setters
     public String getNombre() {
         return nombre;
     }
     public void setNombre(String nombre) {
-        if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nombre inválido");
-        }
         this.nombre = nombre;
     }
 
@@ -46,25 +40,18 @@ public class Categoria extends Base{
         return descripcion;
     }
     public void setDescripcion(String descripcion) {
-        if (descripcion == null || descripcion.trim().isEmpty()) {
-            throw new IllegalArgumentException("Descripción inválida");
-        }
         this.descripcion = descripcion;
     }
 
     public List<Producto> getProductos() {
         return productos;
     }
+
     public void setProductos(List<Producto> productos) {
-        if (productos == null) {
-            throw new IllegalArgumentException("Lista inválida");
-        }
         this.productos = productos;
     }
 
-    // Metodos
     public void agregarProducto(Producto producto){
-        // TODO validarlo antes de agregarlo
         this.productos.add(producto);
     }
 
@@ -75,8 +62,9 @@ public class Categoria extends Base{
             productosStr+=p.getNombre()+'\n';
         }
         return super.toString() +
-                "| Categoria: " + nombre + '\'' +
-                "| Descripcion: " + descripcion + '\''+
+                "| Categoria: " + nombre + '\n' +
+                "| Descripcion: " + descripcion + '\n' +
                 (productos.isEmpty()? "| Categoria sin productos":"| Productos: "+ '\n' + productosStr );
     }
+
 }

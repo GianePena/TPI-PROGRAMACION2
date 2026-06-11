@@ -1,8 +1,8 @@
 CREATE DATABASE IF NOT EXISTS foodstore;
 USE foodstore;
 
-CREATE TABLE IF NOT EXISTS categoria(
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS categorias(
+    id        BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre      VARCHAR(100) UNIQUE,
     descripcion TEXT,
     eliminado   BOOLEAN DEFAULT FALSE,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS categoria(
     deleted_at  DATETIME DEFAULT NULL
     );
 
-CREATE TABLE IF NOT EXISTS producto(
+CREATE TABLE IF NOT EXISTS productos(
     id          BIGINT AUTO_INCREMENT PRIMARY KEY,
     nombre      VARCHAR(100) UNIQUE,
     precio      DOUBLE,
@@ -24,9 +24,45 @@ CREATE TABLE IF NOT EXISTS producto(
     created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME DEFAULT NULL,
     deleted_at  DATETIME DEFAULT NULL,
-    FOREIGN KEY (categoria_id) REFERENCES categoria(id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
+
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
     );
 
--- metodo delete en cascada cuando borras al padre
+CREATE TABLE IF NOT EXISTS usuarios (
+    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre      VARCHAR(100) NOT NULL,
+    apellido    VARCHAR(100) NOT NULL,
+    mail        VARCHAR(100) UNIQUE NOT NULL,
+    celular     VARCHAR(100) NOT NULL,
+    contrasenia VARCHAR(100) NOT NULL,
+    rol         VARCHAR(50) NOT NULL,
+    eliminado   BOOLEAN DEFAULT FALSE,
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at  DATETIME DEFAULT NULL,
+    deleted_at  DATETIME DEFAULT NULL
+    );
+
+CREATE TABLE IF NOT EXISTS pedidos(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATE,
+    estado ENUM('PENDIENTE', 'CONFIRMADO', 'TERMINADO', 'CANCELADO'),
+    total DOUBLE,
+    forma_pago ENUM('TARJETA', 'TRANSFERENCIA', 'EFECTIVO') DEFAULT 'EFECTIVO',
+    usuario_id BIGINT NOT NULL,
+    eliminado BOOLEAN DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT NULL,
+    deleted_at DATETIME DEFAULT NULL,
+
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    );
+
+CREATE TABLE IF NOT EXISTS detalle_pedido(
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id BIGINT NOT NULL,
+    producto_id BIGINT NOT NULL,
+    cantidad INT NOT NULL,
+    subtotal DOUBLE NOT NULL,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
+    );

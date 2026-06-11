@@ -1,4 +1,5 @@
 import config.HikariConnection;
+import menu.MenuGeneral;
 import utilidades.Utilidades;
 
 import java.sql.Connection;
@@ -22,11 +23,11 @@ public class Main {
                     stmt.execute(trimmed);
                 }
             }
-            System.out.println("Schema creado correctamente");
+            System.out.println("\n- Schema creado correctamente");
         }
 
         Scanner sc = new Scanner(System.in);
-        Utilidades.mostrarMenu(sc);
+        MenuGeneral.mostrarMenu(sc);
         sc.close();
 
     }

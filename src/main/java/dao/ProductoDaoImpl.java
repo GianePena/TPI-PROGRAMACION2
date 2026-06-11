@@ -5,7 +5,7 @@ import entities.Categoria;
 import entities.Producto;
 
 import java.sql.*;
-import java.util.ArrayList;
+        import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDaoImpl implements ProductoDao {
@@ -14,7 +14,7 @@ public class ProductoDaoImpl implements ProductoDao {
     public Long guardar(Producto p) {
 
         String sql = """ 
-                INSERT INTO producto
+                INSERT INTO productos
                 (nombre, precio, descripcion, stock, imagen,
                  disponible, categoria_id, eliminado, created_at)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -66,11 +66,11 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM producto p
-                JOIN categoria c
+                FROM productos p
+                JOIN categorias c
                 ON c.id = p.categoria_id
-                WHERE p.eliminado = false
-                AND c.deleted_at = NULL;
+                WHERE p.eliminado = 0
+                AND c.deleted_at IS NULL;
                 """;
 
         List<Producto> productos = new ArrayList<>();
@@ -84,25 +84,18 @@ public class ProductoDaoImpl implements ProductoDao {
 
             while (rs.next()) {
 
+                System.out.println("Producto encontrado: " +
+                        rs.getString("nombre"));
+
                 Categoria categoria =
                         new CategoriaDaoImpl()
                                 .buscarPorId(rs.getLong("categoria_id"));
 
-                Producto producto = new Producto(
-                        rs.getLong("id"),
-                        rs.getBoolean("eliminado"),
-                        rs.getTimestamp("created_at").toLocalDateTime(),
-                        rs.getString("nombre"),
-                        rs.getDouble("precio"),
-                        rs.getString("descripcion"),
-                        rs.getInt("stock"),
-                        rs.getString("imagen"),
-                        rs.getBoolean("disponible"),
-                        categoria
-                );
+                Producto producto = mapearProducto(rs, categoria);
 
                 productos.add(producto);
             }
+            System.out.println("Cantidad productos: " + productos.size());
 
             return productos;
 
@@ -116,9 +109,9 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM producto
+                FROM productos
                 WHERE nombre = ?
-                AND eliminado = false
+                AND eliminado = 0
                 """;
 
         try (
@@ -136,18 +129,7 @@ public class ProductoDaoImpl implements ProductoDao {
                             new CategoriaDaoImpl()
                                     .buscarPorId(rs.getLong("categoria_id"));
 
-                    return new Producto(
-                            rs.getLong("id"),
-                            rs.getBoolean("eliminado"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getString("nombre"),
-                            rs.getDouble("precio"),
-                            rs.getString("descripcion"),
-                            rs.getInt("stock"),
-                            rs.getString("imagen"),
-                            rs.getBoolean("disponible"),
-                            categoria
-                    );
+                    return mapearProducto(rs,categoria);
                 }
             }
 
@@ -163,9 +145,9 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM producto
+                FROM productos
                 WHERE id = ?
-                AND eliminado = false
+                AND eliminado = 0
                 """;
 
         try (
@@ -183,18 +165,7 @@ public class ProductoDaoImpl implements ProductoDao {
                             new CategoriaDaoImpl()
                                     .buscarPorId(rs.getLong("categoria_id"));
 
-                    return new Producto(
-                            rs.getLong("id"),
-                            rs.getBoolean("eliminado"),
-                            rs.getTimestamp("created_at").toLocalDateTime(),
-                            rs.getString("nombre"),
-                            rs.getDouble("precio"),
-                            rs.getString("descripcion"),
-                            rs.getInt("stock"),
-                            rs.getString("imagen"),
-                            rs.getBoolean("disponible"),
-                            categoria
-                    );
+                    return mapearProducto(rs, categoria);
                 }
             }
 
@@ -209,7 +180,7 @@ public class ProductoDaoImpl implements ProductoDao {
     public Long actualizar(Producto p) {
 
         String sql = """
-                UPDATE producto
+                UPDATE productos
                 SET nombre = ?,
                     precio = ?,
                     descripcion = ?,
@@ -218,7 +189,7 @@ public class ProductoDaoImpl implements ProductoDao {
                     disponible = ?,
                     categoria_id = ?
                 WHERE id = ?
-                AND eliminado = false
+                AND eliminado = 0
                 """;
 
         try (
@@ -252,11 +223,10 @@ public class ProductoDaoImpl implements ProductoDao {
     public Long eliminar(Producto p) {
 
         String sql = """
-                UPDATE producto
-                SET eliminado = true
+                UPDATE productos
+                SET eliminado = 1
                 WHERE id = ?
                 """;
-
         try (
                 Connection con = HikariConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)
@@ -275,5 +245,18 @@ public class ProductoDaoImpl implements ProductoDao {
         } catch (Exception e) {
             throw new RuntimeException("Error al eliminar producto", e);
         }
+    }
+    private Producto mapearProducto(ResultSet rs, Categoria categoria)throws SQLException{
+        return new Producto(
+                rs.getLong("id"),
+                rs.getBoolean("eliminado"),
+                rs.getTimestamp("created_at").toLocalDateTime(),
+                rs.getString("nombre"),
+                rs.getDouble("precio"),
+                rs.getString("descripcion"),
+                rs.getInt("stock"),
+                rs.getString("imagen"),
+                rs.getBoolean("disponible"),
+                categoria);
     }
 }

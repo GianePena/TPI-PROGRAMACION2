@@ -1,5 +1,70 @@
 package entities;
 
-public class Usuario {
+import enums.Rol;
 
+import java.time.LocalDateTime;
+
+public class Usuario extends Base {
+    private String nombre;
+    private String apellido;
+    private String mail;
+    private String celular;
+    private String contrasenia;
+    private Rol rol;
+
+
+    public Usuario(String nombre, String apellido, String mail, String celular,String contrasenia, Rol rol) {
+        super();
+        this.setNombre(nombre);
+        this.setApellido(apellido);
+        this.setMail(mail);
+        this.setCelular(celular);
+        this.setContrasenia(contrasenia);
+        this.setRol(rol);
+    }
+
+
+    public Usuario(Long id, boolean eliminado, LocalDateTime createdAt, String nombre, String apellido, String mail, String celular, String contrasenia, Rol rol) {
+        super(id, eliminado, createdAt);
+        this.id=id;
+        this.setNombre(nombre);
+        this.setApellido(apellido);
+        this.setMail(mail);
+        this.setCelular(celular);
+        this.setContrasenia(contrasenia);
+        this.setRol(rol);
+    }
+
+    public String getNombre() {return nombre;}
+    public void setNombre(String nombre) {this.nombre = nombre;}
+
+    public String getApellido() {return apellido;}
+    public void setApellido(String apellido) {this.apellido = apellido;}
+
+    public String getMail() {return mail;}
+    public void setMail(String mail) {this.mail = mail;}
+
+    public String getCelular() {return celular;}
+    public void setCelular(String cedular) {this.celular = cedular;}
+
+    public String getContrasenia() {return contrasenia;}
+    public  void  setContrasenia(String contrasenia) {this.contrasenia = contrasenia;}
+
+    public Rol getRol() {return rol;}
+    public void setRol(Rol rol) {this.rol = rol;}
+
+    public Long getId(){return  super.getId();}
+
+    @Override
+    public String toString() {
+        return "| Usuario:" +
+                "\n" + super.toString() +
+                "\n| Nombre: " + nombre +
+                "\n| Apellido: " + apellido +
+                "\n| Mail: " + mail +
+                "\n| Celular: " + celular +
+                "\n| Contraseña: " + contrasenia +
+                "\n| Rol: " + rol;
+    }
 }
+

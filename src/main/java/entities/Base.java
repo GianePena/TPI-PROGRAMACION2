@@ -15,14 +15,14 @@ public class Base {
 
     // Constructor para objetos nuevos
     public Base() {
-        this.eliminado = false;
-        this.createdAt = LocalDateTime.now();
+        this.setEliminado(false);
+        this.setCreatedAt();
     }
 
     // Constructor para objetos recuperados de la DB
     public Base(Long id, boolean eliminado, LocalDateTime createdAt) {
-        this.id = id;
-        this.eliminado = eliminado;
+        this.setId(id);
+        this.setEliminado(eliminado);
         this.createdAt = createdAt;
     }
 
@@ -50,6 +50,9 @@ public class Base {
         return deletedAt;
     }
 
+    public void setCreatedAt(){
+        this.createdAt = Utilidades.generarFecha();
+    }
     public void setUpdatedAt() {
         this.updatedAt = Utilidades.generarFecha();
     }
@@ -65,12 +68,7 @@ public class Base {
     @Override
     public String toString() {
         return
-                "| ID: " + id +
-                 (this.eliminado==true?"- eliminado=" + eliminado:"") +
-                 (this.createdAt!=null?"- createdAt=" + createdAt:"") +
-                (this.updatedAt!=null?"- updatedAt=" + updatedAt :"" )+
-                (this.deletedAt!=null?"- deletedAt=" + deletedAt :"" );
-
+                "| ID: " + id ;
     }
 
 }
