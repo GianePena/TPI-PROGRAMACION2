@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DetallePedidoImpl implements DetallePedidoDao {
-
     @Override
     public List<DetallePedido> listar(Long pedidoId) {
 
@@ -31,7 +30,7 @@ public class DetallePedidoImpl implements DetallePedidoDao {
                        c.descripcion  AS cat_desc
                 FROM detalle_pedido dp
                          JOIN productos pr ON dp.producto_id = pr.id
-                         JOIN categoria c ON pr.categoria_id = c.id
+                         JOIN categorias c ON pr.categoria_id = c.id
                 WHERE dp.pedido_id = ?
                   AND dp.eliminado = FALSE
                 """;
@@ -91,50 +90,92 @@ public class DetallePedidoImpl implements DetallePedidoDao {
         }
     }
     @Override
-    public Long eliminar(Long id) {
+    public DetallePedido buscarDetalle(Long pedidoId, Long productoId) {
 
         String sql = """
-                UPDATE detalle_pedido
-                SET eliminado = TRUE
-                WHERE id = ?
-                """;
+            SELECT dp.*,
+                   pr.nombre      AS prod_nombre,
+                   pr.precio      AS prod_precio,
+                   pr.descripcion AS prod_desc,
+                   pr.stock,
+                   pr.imagen,
+                   pr.disponible,
+                   pr.categoria_id,
+                   c.nombre       AS cat_nombre,
+                   c.descripcion  AS cat_desc
+            FROM detalle_pedido dp
+                     JOIN productos pr ON dp.producto_id = pr.id
+                     JOIN categorias c ON pr.categoria_id = c.id
+            WHERE dp.pedido_id = ?
+              AND dp.producto_id = ?
+              AND dp.eliminado = FALSE
+            """;
 
         try (
                 Connection con = HikariConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)
         ) {
-            ps.setLong(1, id);
+            ps.setLong(1, pedidoId);
+            ps.setLong(2, productoId);
 
-            int filas = ps.executeUpdate();
-            return filas > 0 ? id : null;
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapearDetalle(rs);
+                }
+            }
+
+            return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar detalle de pedido", e);
+            throw new RuntimeException("Error al buscar detalle", e);
         }
     }
 
+    @Override
+    public Long eliminarDetalle(Long pedidoId, Long productoId) {
 
-    private DetallePedido mapearDetalle (ResultSet rs) throws SQLException {
+        String sql = """
+            UPDATE detalle_pedido
+            SET eliminado = TRUE
+            WHERE pedido_id = ?
+              AND producto_id = ?
+            """;
 
+        try (
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+            ps.setLong(1, pedidoId);
+            ps.setLong(2, productoId);
+
+            int filas = ps.executeUpdate();
+            return filas > 0 ? productoId : null;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar detalle", e);
+        }
+    }
+    private DetallePedido mapearDetalle(ResultSet rs) throws SQLException {
         Categoria categoria = new Categoria(
-                rs.getLong("id"),
-                rs.getBoolean("eliminado"),
-                rs.getTimestamp("created_at").toLocalDateTime(),
-                rs.getString("nombre"),
-                rs.getString("descripcion")
+                rs.getLong("categoria_id"),
+                false,
+                null,
+                rs.getString("cat_nombre"),
+                rs.getString("cat_desc")
         );
 
         Producto prod = new Producto(
-                rs.getLong("id"),
-                rs.getBoolean("eliminado"),
-                rs.getTimestamp("created_at").toLocalDateTime(),
-                rs.getString("nombre"),
-                rs.getDouble("precio"),
-                rs.getString("descripcion"),
+                rs.getLong("producto_id"),
+                false,
+                null,
+                rs.getString("prod_nombre"),
+                rs.getDouble("prod_precio"),
+                rs.getString("prod_desc"),
                 rs.getInt("stock"),
                 rs.getString("imagen"),
                 rs.getBoolean("disponible"),
-                categoria);
+                categoria
+        );
 
         return new DetallePedido(
                 rs.getLong("id"),
@@ -145,4 +186,5 @@ public class DetallePedidoImpl implements DetallePedidoDao {
                 prod
         );
     }
+
 }

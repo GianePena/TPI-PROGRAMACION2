@@ -35,12 +35,14 @@ public class MainPedido {
             case 4:
                 eliminar(sc);
                 break;
+            case 5:
+                actuaizarDetalle(sc);
+                break;
 
             default:
                 System.out.println("Opción inválida. Ingrese una opción del 1 al 4.");
         }
     }
-
     private static void listar() {
         System.out.println("=== TODOS LOS PEDIDOS ===");
 
@@ -49,14 +51,7 @@ public class MainPedido {
         if (lista.isEmpty()) {
             System.out.println("No hay pedidos registrados.");
         } else {
-            for (Pedido p : lista) {
-                System.out.println(p);
-
-                p.getDetalles()
-                        .stream()
-                        .filter(d -> !d.isEliminado())
-                        .forEach(System.out::println);
-            }
+            Utilidades.mostrarLista(lista);
         }
     }
 
@@ -70,8 +65,6 @@ public class MainPedido {
 
 
             MainUsuario.listarUsuarios();
-            //Utilidades.mostrarLista(usuarioService.listarUsuarios());
-            //usuarioService.listarUsuarios().forEach(System.out::println);
 
             System.out.print("ID de usuario: ");
             Long uid = Utilidades.leerLong(sc);
@@ -125,6 +118,51 @@ public class MainPedido {
         } catch (Exception e) {
             System.out.println("Error al crear pedido: " + e.getMessage());
             System.out.println("El pedido fue cancelado.");
+        }
+    }
+    private static void actuaizarDetalle(Scanner sc) {
+        try {
+            System.out.println("=== GESTIONAR DETALLE DE PEDIDO ===");
+            if(pedidoService.listar().isEmpty()){
+                System.out.println("No hay pedidos registrados.");
+                return;
+            }
+            listar();
+
+            System.out.print("ID del pedido: ");
+            Long pedidoId = Utilidades.leerLong(sc);
+
+            productoService.listarProductos().forEach(System.out::println);
+
+            System.out.print("ID del producto: ");
+            Long productoId = Utilidades.leerLong(sc);
+
+            System.out.println("1. BUSCAR");
+            System.out.println("2. ELIMINAR");
+            System.out.print("Seleccione: ");
+            int op = Utilidades.leerInt(sc);
+
+            switch (op) {
+                case 1:
+                    System.out.println(pedidoService.buscarDetalle(pedidoId, productoId));
+                    break;
+                case 2:
+                    System.out.print("¿Confirma eliminar? (S/N): ");
+                    String confirmacion = Utilidades.leerString(sc);
+                    if (confirmacion.equalsIgnoreCase("S")) {
+                        pedidoService.eliminarDetalle(pedidoId, productoId);
+                        System.out.println("Detalle eliminado.");
+                    } else {
+                        System.out.println("Cancelado.");
+                    }
+                    break;
+                default:
+                    System.out.println("Opcion invalida. Ingrese una opcion del 1 al 2.");
+                    break;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 

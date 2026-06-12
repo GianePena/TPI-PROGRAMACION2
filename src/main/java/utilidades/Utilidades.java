@@ -46,7 +46,7 @@ public class Utilidades {
         while (true) {
             try {
                 Long id = Long.parseLong(sc.nextLine().trim());
-                validarId(id);  // ← valida que sea positivo
+                validarId(id);
                 return id;
             } catch (NumberFormatException e) {
                 System.out.println("Ingrese un número válido. Intente nuevamente");

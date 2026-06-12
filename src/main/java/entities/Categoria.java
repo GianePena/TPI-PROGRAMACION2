@@ -59,7 +59,7 @@ public class Categoria extends Base{
     public String toString() {
         String productosStr="";
         for(Producto p:productos){
-            productosStr+=p.getNombre()+'\n';
+            productosStr+= " - "+p.getNombre()+'\n';
         }
         return super.toString() +
                 "| Categoria: " + nombre + '\n' +

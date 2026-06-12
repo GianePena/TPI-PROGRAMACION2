@@ -19,10 +19,10 @@ public class PedidoDaoImpl implements PedidoDao {
     public Long guardar(Pedido p) {
 
         String sql = """
-            INSERT INTO pedidos
-            (fecha, estado, total, forma_pago, usuario_id)
-            VALUES (?, ?, ?, ?, ?)
-            """;
+                INSERT INTO pedidos
+                (fecha, estado, total, forma_pago, usuario_id, eliminado, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                """;
 
         try (
                 Connection con = HikariConnection.getConnection();
@@ -37,6 +37,8 @@ public class PedidoDaoImpl implements PedidoDao {
             ps.setDouble(3, p.getTotal());
             ps.setString(4, p.getFormaPago().name());
             ps.setLong(5, p.getUsuario().getId());
+            ps.setBoolean(6, p.isEliminado());
+            ps.setTimestamp(7, Timestamp.valueOf(p.getCreatedAt()));
 
             int filas = ps.executeUpdate();
 
@@ -66,7 +68,8 @@ public class PedidoDaoImpl implements PedidoDao {
 
         String sql = """
             SELECT *
-            FROM pedidos
+            FROM pedidos 
+            WHERE eliminado= false
             """;
 
         List<Pedido> pedidos = new ArrayList<>();
@@ -110,7 +113,9 @@ public class PedidoDaoImpl implements PedidoDao {
         String sql = """
             SELECT *
             FROM pedidos
-            WHERE usuario_id = ?
+            WHERE
+            usuario_id = ?
+              AND eliminado = FALSE
             """;
 
         List<Pedido> pedidos = new ArrayList<>();
@@ -191,6 +196,7 @@ public class PedidoDaoImpl implements PedidoDao {
             SELECT *
             FROM pedidos
             WHERE id = ?
+            AND eliminado = FALSE
             """;
 
         try (
@@ -235,7 +241,8 @@ public class PedidoDaoImpl implements PedidoDao {
             UPDATE pedidos
             SET estado = ?,
                 forma_pago = ?,
-                total = ?
+                total = ?,
+                updated_at=?
             WHERE id = ?
             """;
 
@@ -247,7 +254,8 @@ public class PedidoDaoImpl implements PedidoDao {
             ps.setString(1, p.getEstado().name());
             ps.setString(2, p.getFormaPago().name());
             ps.setDouble(3, p.getTotal());
-            ps.setLong(4, p.getId());
+            ps.setTimestamp(4, Timestamp.valueOf(p.getUpdatedAt()));
+            ps.setLong(5, p.getId());
 
             int filas = ps.executeUpdate();
 
@@ -259,11 +267,11 @@ public class PedidoDaoImpl implements PedidoDao {
     }
 
     @Override
-    public Long eliminar(Long id) {
+    public Long eliminar(Pedido pedido) {
 
         String sql = """
                 UPDATE pedidos
-                SET eliminado = true
+                SET eliminado=?, deleted_at=?
                 WHERE id = ?
                 """;
 
@@ -271,19 +279,19 @@ public class PedidoDaoImpl implements PedidoDao {
                 Connection con = HikariConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)
         ) {
-
-            ps.setLong(1, id);
+            ps.setBoolean(1, pedido.isEliminado());
+            ps.setTimestamp(2, Timestamp.valueOf(pedido.getDeletedAt()));
+            ps.setLong(3, pedido.getId());
 
             int filasAfectadas = ps.executeUpdate();
 
             if (filasAfectadas > 0) {
-                return id;
+                return pedido.getId();
             }
-
             return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar producto", e);
+            throw new RuntimeException("Error al eliminar pedido", e);
         }
     }
 }

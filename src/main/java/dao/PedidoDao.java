@@ -11,6 +11,6 @@ public interface PedidoDao {
     List<Pedido> buscarPorUsuario(Long usuarioId);
     Long guardar(Pedido pedido);
     Long actualizar(Pedido pedido);
-    Long eliminar(Long id);
+    Long eliminar(Pedido pedido);
 }
 

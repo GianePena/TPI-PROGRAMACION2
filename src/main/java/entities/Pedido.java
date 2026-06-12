@@ -124,12 +124,12 @@ public class Pedido extends Base implements Calculable {
         for(DetallePedido d:detalles){
             detalleStr=d.toString()+'\n';
         }
-        return "PEDIDO " +
+        return "\nPEDIDO: #id " +this.getId()+
                 "\n| Fecha: " + fecha +
                 "\n| Usuario: " + usuario.getNombre()+ " " +usuario.getApellido()+
                 "\n| Email: " + usuario.getMail()+
-                "\n| Detalles: " + detalleStr+
-                "\n| Forma de Pago: " + formaPago +
+                "\n| Detalles: " + (detalleStr.isEmpty()?"Agregar productos a la compra": detalleStr)+
+                "\n|Forma de Pago: " + formaPago +
                 "\n| Total: " + total ;
     }
 }

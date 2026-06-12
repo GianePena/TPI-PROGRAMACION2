@@ -1,11 +1,13 @@
 package dao;
 
 import entities.DetallePedido;
+import entities.Producto;
 
 import java.util.List;
 
 public interface DetallePedidoDao {
     List<DetallePedido> listar(Long pedidoId);
     Long guardar(DetallePedido detalle, Long pedidoId);
-    Long eliminar(Long id);
+    DetallePedido buscarDetalle(Long pedidoId, Long productoId);
+    Long eliminarDetalle(Long pedidoId, Long productoId);
 }

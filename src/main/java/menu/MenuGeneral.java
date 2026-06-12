@@ -21,7 +21,6 @@ public class MenuGeneral {
         System.out.println("  3. Editar");
         System.out.println("  4. Eliminar");
         System.out.print("Ingrese una opcion: ");
-
     }
     public static void mostrarMenu(Scanner sc) {
         while (true) {
@@ -51,7 +50,12 @@ public class MenuGeneral {
 
                 case 4:
                     System.out.println("=== PEDIDOS ===");
-                    mostrarSubopcionesMenu(sc);
+                    System.out.println("  1. Listar");
+                    System.out.println("  2. Crear");
+                    System.out.println("  3. Editar");
+                    System.out.println("  4. Eliminar");
+                    System.out.println("  5. Actualizar detalle");
+                    System.out.print("Ingrese una opcion: ");
                    subOpcion =  Utilidades.leerInt(sc);
                    MainPedido.menuPedido(subOpcion,sc);
                     continue;
