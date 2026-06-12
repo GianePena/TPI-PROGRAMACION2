@@ -3,6 +3,7 @@ package dao;
 import config.HikariConnection;
 import entities.Categoria;
 import entities.Producto;
+import interfaces.ProductoDao;
 
 import java.sql.*;
         import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class ProductoDaoImpl implements ProductoDao {
             return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al guardar producto", e);
+            throw new RuntimeException("Error al guardarPedido producto", e);
         }
     }
 
@@ -100,7 +101,7 @@ public class ProductoDaoImpl implements ProductoDao {
             return productos;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al listar productos", e);
+            throw new RuntimeException("Error al listarPedidos productos", e);
         }
     }
 
@@ -243,7 +244,7 @@ public class ProductoDaoImpl implements ProductoDao {
             return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar producto", e);
+            throw new RuntimeException("Error al eliminarPedidoPorId producto", e);
         }
     }
     private Producto mapearProducto(ResultSet rs, Categoria categoria)throws SQLException{

@@ -61,8 +61,7 @@ public class Categoria extends Base{
         for(Producto p:productos){
             productosStr+= " - "+p.getNombre()+'\n';
         }
-        return super.toString() +
-                "| Categoria: " + nombre + '\n' +
+        return "\nCATEGORIA "+ nombre.toUpperCase() + " " +super.toString() + '\n' +
                 "| Descripcion: " + descripcion + '\n' +
                 (productos.isEmpty()? "| Categoria sin productos":"| Productos: "+ '\n' + productosStr );
     }

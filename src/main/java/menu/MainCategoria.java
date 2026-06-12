@@ -60,9 +60,10 @@ public class MainCategoria {
 
     private static void editarCategoria(Scanner sc){
         try {
+            System.out.println("\n--- CATEGORIAS ---");
+            service.listarCategorias().forEach(System.out::println);
             System.out.println("\n=== EDITAR CATEGORIA ===");
-            listarCategorias();
-            System.out.print("ID de la categoria a editar: ");
+            System.out.print("\n- ID de la categoria a editar: ");
             Long id = Utilidades.leerLong(sc);
 
             System.out.print("Ingrese el atributo a modificar( NOMBRE | DESCRIPCION) : ");
@@ -72,7 +73,7 @@ public class MainCategoria {
             String valor = Utilidades.leerString(sc);
 
 
-            Long idActualizado = service.actualizarCategoria(id, atributo, valor);
+            Long idActualizado = service.actualizarCategoriaPorId(id, atributo, valor);
             System.out.println("Categoria actualizada. ID: " + idActualizado);
 
         } catch (NoEncontradoException | StringInvalidException | IllegalArgumentException | IdInvalidException e) {
@@ -81,8 +82,10 @@ public class MainCategoria {
     }
     private static void eliminarCategoria(Scanner sc){
         try {
+            System.out.println("\n--- CATEGORIAS ---");
+            service.listarCategorias().forEach(System.out::println);
             System.out.println("\n=== ELIMINAR CATEGORIA ===");
-            System.out.print("ID de la categoria a eliminar: ");
+            System.out.print("\n- ID de la categoria a eliminar: ");
             Long id = Utilidades.leerLong(sc);
 
             System.out.println("Seguro quiere eliminar categoria: "+ id );
@@ -92,7 +95,7 @@ public class MainCategoria {
                 System.out.println("Eliminacion cancelada");
                 return;
             }
-            Long idEliminado = service.eliminarCategoria(id);
+            Long idEliminado = service.eliminarCategoriaPorId(id);
             System.out.println("Categoria eliminada. ID: " + idEliminado);
 
         } catch (NoEncontradoException | IdInvalidException e) {

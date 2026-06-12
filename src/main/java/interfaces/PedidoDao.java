@@ -1,7 +1,6 @@
-package dao;
+package interfaces;
 
 import entities.Pedido;
-import entities.Producto;
 
 import java.util.List;
 

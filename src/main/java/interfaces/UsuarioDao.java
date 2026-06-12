@@ -1,8 +1,7 @@
-package dao;
+package interfaces;
 
 import entities.Usuario;
 import java.util.List;
-import java.util.Optional;
 
 public interface UsuarioDao {
     Long guardar(Usuario usuario);

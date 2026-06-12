@@ -74,15 +74,16 @@ public class MainUsuario {
         Rol rol = (opRol == 1) ? Rol.ADMIN : Rol.USUARIO;
 
         try {
-            Long id = usuarioService.createUsuario(nombre, apellido, mail, celular, contrasenia, rol);
+            Long id = usuarioService.agregarUsuario(nombre, apellido, mail, celular, contrasenia, rol);
             System.out.println("Usuario creado con ID: " + id);
         } catch (StringInvalidException | EsExistenteException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
     private static void editarUsuario(Scanner sc) {
+        System.out.println("\n--- USUARIOS ---");
+        usuarioService.listarUsuarios().forEach(System.out::println);
         System.out.println("\n=== EDITAR USUARIO ===");
-        listarUsuarios();
 
         System.out.print("ID del usuario a editar: ");
         Long id = Utilidades.leerLong(sc);
@@ -94,7 +95,7 @@ public class MainUsuario {
         String valor = Utilidades.leerString(sc);
 
         try {
-            Long idActualizado= usuarioService.updateUsuario(id, atributo,valor);
+            Long idActualizado= usuarioService.actualizarUsuario(id, atributo,valor);
             System.out.println("Usuario actualizada. ID: " + idActualizado);
         } catch (StringInvalidException | IdInvalidException | NoEncontradoException e) {
             System.out.println("Error: " + e.getMessage());
@@ -113,7 +114,7 @@ public class MainUsuario {
 
         if (confirm.equalsIgnoreCase("S")) {
             try {
-                usuarioService.deleteUsuario(id);
+                usuarioService.eliminarUsuario(id);
                 System.out.println("Usuario eliminado (baja logica).");
             } catch (IdInvalidException | NoEncontradoException e) {
                 System.out.println("Error: " + e.getMessage());

@@ -3,12 +3,13 @@ package dao;
 import config.HikariConnection;
 import entities.Categoria;
 import entities.Producto;
+import interfaces.CategoriaDao;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoriaDaoImpl implements CategoriaDao{
+public class CategoriaDaoImpl implements CategoriaDao {
     @Override
     public Long guardar(Categoria categoria) {
         String sql="INSERT INTO categorias (nombre, descripcion, eliminado, created_at) VALUES( ?, ?, ?, ?)";
@@ -34,7 +35,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
             }
             return null;
         } catch (Exception e) {
-            throw new RuntimeException("Error al guardar categoria", e);
+            throw new RuntimeException("Error al guardarPedido categoria", e);
         }
     }
     public Categoria buscarPorNombre(String nombre){
@@ -103,7 +104,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
             }
             return catagorias;
         }catch (Exception e){
-            throw new RuntimeException("Error al listar categorias", e);
+            throw new RuntimeException("Error al listarPedidos categorias", e);
         }
     }
 
@@ -168,7 +169,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
             }
             return null;
         } catch (Exception e){
-            throw new RuntimeException("Error al eliminar categoria", e);
+            throw new RuntimeException("Error al eliminarPedidoPorId categoria", e);
         }
     }
 

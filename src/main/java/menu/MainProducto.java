@@ -2,10 +2,7 @@ package menu;
 
 import entities.Categoria;
 import entities.Producto;
-import exceptions.EsExistenteException;
-import exceptions.IdInvalidException;
-import exceptions.NoEncontradoException;
-import exceptions.StringInvalidException;
+import exceptions.*;
 import service.CategoriaService;
 import service.ProductoService;
 import utilidades.Utilidades;
@@ -112,42 +109,85 @@ public class MainProducto {
         }
     }
 
+    private static void mostrarAtributos(){
+        System.out.println("""
+                
+                --- ATRIBUTO A MODIFICAR ---
+                1. Nombre
+                2. Precio
+                3. Descripcion
+                4. Stock
+                5. Imagen
+                6. Categoria
+                """);
+
+        System.out.print("Seleccione una opcion: ");
+    }
+
     private static void editarProducto(Scanner sc) {
 
         try {
+            System.out.println("\n--- PRODUCTOS DISPONIBLES ---");
+            service.listarProductos().forEach(System.out::println);
+
             System.out.println("\n--- EDITAR PRODUCTO ---");
             System.out.print("ID del producto a editar: ");
             Long id = Utilidades.leerLong(sc);
 
-            System.out.println("""
-                    
-                    Atributo a modificar:
-                    nombre
-                    precio
-                    descripcion
-                    stock
-                    imagen
-                    """);
+            MainProducto.mostrarAtributos();
+            int opcion = Utilidades.leerInt(sc);
+            String atributo;
+            String nuevoValor;
 
-            String atributo = Utilidades.leerString(sc);
+            switch (opcion) {
 
-            System.out.print("Nuevo valor: ");
-            String nuevoValor = Utilidades.leerString(sc);
+                case 1:
+                    atributo = "nombre";
+                    System.out.print("- Nuevo nombre: ");
+                    nuevoValor = Utilidades.leerString(sc);
+                    break;
 
-            Long idActualizado =
-                    service.actualizarProducto(
-                            id,
-                            atributo,
-                            nuevoValor
-                    );
+                case 2:
+                    atributo = "precio";
+                    System.out.print("- Nuevo precio: ");
+                    nuevoValor = Utilidades.leerString(sc);
+                    break;
 
+                case 3:
+                    atributo = "descripcion";
+                    System.out.print("- Nueva descripcion: ");
+                    nuevoValor = Utilidades.leerString(sc);
+                    break;
+
+                case 4:
+                    atributo = "stock";
+                    System.out.print("- Nuevo stock: ");
+                    nuevoValor = Utilidades.leerString(sc);
+                    break;
+
+                case 5:
+                    atributo = "imagen";
+                    System.out.print("- Nueva imagen: ");
+                    nuevoValor = Utilidades.leerString(sc);
+                    break;
+
+                case 6:
+                    atributo = "categoria";
+                    System.out.println("\n--- CATEGORIAS DISPONIBLES ---");
+                    categoriaService.listarCategorias().forEach(System.out::println);
+
+                    System.out.print("ID de la nueva categoria: ");
+                    Long idCategoria = Utilidades.leerLong(sc);
+                    nuevoValor = idCategoria.toString();
+                    break;
+
+                default: throw new IllegalArgumentException("Opcion invalida");
+            }
+            Long idActualizado = service.actualizarProducto(id, atributo, nuevoValor);
             System.out.println("Producto actualizado. ID: " + idActualizado);
 
-        } catch (NoEncontradoException |
-                 StringInvalidException |
-                 IllegalArgumentException |
-                 IdInvalidException e) {
-
+        } catch (NoEncontradoException | StringInvalidException |
+                 IllegalArgumentException | IdInvalidException e) {
             System.out.println(e.getMessage());
         }
     }

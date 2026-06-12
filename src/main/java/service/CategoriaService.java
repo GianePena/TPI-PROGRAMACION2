@@ -1,6 +1,6 @@
 package service;
 
-import dao.CategoriaDao;
+import interfaces.CategoriaDao;
 import dao.CategoriaDaoImpl;
 import entities.Categoria;
 import exceptions.EsExistenteException;
@@ -19,7 +19,7 @@ public class CategoriaService {
         return dao.listar();
     }
 
-    public Categoria buscarPorId(Long id)throws IdInvalidException{
+    public Categoria buscarCategoriaPorId(Long id)throws IdInvalidException{
         Utilidades.validarId(id);
         return dao.buscarPorId(id);
     }
@@ -36,7 +36,7 @@ public class CategoriaService {
         return dao.guardar(categoria);
     }
 
-    public Long actualizarCategoria(Long id, String atributo, String valor)throws NoEncontradoException, StringInvalidException,IllegalArgumentException, IdInvalidException{
+    public Long actualizarCategoriaPorId(Long id, String atributo, String valor)throws NoEncontradoException, StringInvalidException,IllegalArgumentException, IdInvalidException{
         Utilidades.validarId(id);
         Utilidades.validarString(atributo);
         Utilidades.validarString(valor);
@@ -56,7 +56,7 @@ public class CategoriaService {
                 throw new StringInvalidException("Error atributo a modificar invalido");
         }
     }
-    public Long eliminarCategoria(Long id)throws NoEncontradoException, IdInvalidException {
+    public Long eliminarCategoriaPorId(Long id)throws NoEncontradoException, IdInvalidException {
         Utilidades.validarId(id);
         Categoria categoria=dao.buscarPorId(id);
         if (categoria==null){

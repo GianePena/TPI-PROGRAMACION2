@@ -46,7 +46,7 @@ public class MainPedido {
     private static void listar() {
         System.out.println("=== TODOS LOS PEDIDOS ===");
 
-        List<Pedido> lista = pedidoService.listar();
+        List<Pedido> lista = pedidoService.listarPedidos();
 
         if (lista.isEmpty()) {
             System.out.println("No hay pedidos registrados.");
@@ -77,7 +77,7 @@ public class MainPedido {
 
             FormaPago fp = seleccionarFormaPago(Utilidades.leerInt(sc));
 
-            pedido = pedidoService.iniciarPedido(uid, fp);
+            pedido = pedidoService.agregarPedido(uid, fp);
 
             boolean agregarMas = true;
 
@@ -108,7 +108,7 @@ public class MainPedido {
                 agregarMas = respuesta.equalsIgnoreCase("S");
             }
 
-            pedidoService.guardar(pedido);
+            pedidoService.guardarPedido(pedido);
 
             System.out.println("Pedido creado. ID: " +
                     pedido.getId() +
@@ -123,7 +123,7 @@ public class MainPedido {
     private static void actuaizarDetalle(Scanner sc) {
         try {
             System.out.println("=== GESTIONAR DETALLE DE PEDIDO ===");
-            if(pedidoService.listar().isEmpty()){
+            if(pedidoService.listarPedidos().isEmpty()){
                 System.out.println("No hay pedidos registrados.");
                 return;
             }
@@ -144,13 +144,13 @@ public class MainPedido {
 
             switch (op) {
                 case 1:
-                    System.out.println(pedidoService.buscarDetalle(pedidoId, productoId));
+                    System.out.println(pedidoService.buscarDetallePorId(pedidoId, productoId));
                     break;
                 case 2:
-                    System.out.print("¿Confirma eliminar? (S/N): ");
+                    System.out.print("¿Confirma eliminarPedidoPorId? (S/N): ");
                     String confirmacion = Utilidades.leerString(sc);
                     if (confirmacion.equalsIgnoreCase("S")) {
-                        pedidoService.eliminarDetalle(pedidoId, productoId);
+                        pedidoService.eliminarDetallePorId(pedidoId, productoId);
                         System.out.println("Detalle eliminado.");
                     } else {
                         System.out.println("Cancelado.");
@@ -192,7 +192,7 @@ public class MainPedido {
 
             FormaPago fp = seleccionarFormaPago(Utilidades.leerInt(sc));
 
-            pedidoService.actualizarEstadoYPago(id, estado, fp);
+            pedidoService.actualizarEstadoYPagoPorId(id, estado, fp);
 
             System.out.println("Pedido actualizado.");
 
@@ -203,6 +203,8 @@ public class MainPedido {
 
     private static void eliminar(Scanner sc) {
         try {
+            System.out.println("\n--- PEDIDOS ---");
+            pedidoService.listarPedidos().forEach(System.out::println);
             System.out.println("=== ELIMINAR PEDIDO ===");
 
             listar();
@@ -220,7 +222,7 @@ public class MainPedido {
                 return;
             }
 
-            pedidoService.eliminar(id);
+            pedidoService.eliminarPedidoPorId(id);
 
             System.out.println("Pedido eliminado.");
 

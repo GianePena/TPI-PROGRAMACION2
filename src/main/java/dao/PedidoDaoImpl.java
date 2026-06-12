@@ -8,6 +8,7 @@ import entities.Producto;
 import entities.Usuario;
 import enums.Estado;
 import enums.FormaPago;
+import interfaces.PedidoDao;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class PedidoDaoImpl implements PedidoDao {
             return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al guardar pedido", e);
+            throw new RuntimeException("Error al guardarPedido pedido", e);
         }
     }
 
@@ -103,7 +104,7 @@ public class PedidoDaoImpl implements PedidoDao {
             return pedidos;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al listar pedidos", e);
+            throw new RuntimeException("Error al listarPedidos pedidos", e);
         }
     }
 
@@ -291,7 +292,7 @@ public class PedidoDaoImpl implements PedidoDao {
             return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar pedido", e);
+            throw new RuntimeException("Error al eliminarPedidoPorId pedido", e);
         }
     }
 }

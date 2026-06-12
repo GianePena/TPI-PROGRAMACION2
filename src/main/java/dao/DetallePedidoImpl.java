@@ -4,6 +4,7 @@ import config.HikariConnection;
 import entities.Categoria;
 import entities.DetallePedido;
 import entities.Producto;
+import interfaces.DetallePedidoDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -52,7 +53,7 @@ public class DetallePedidoImpl implements DetallePedidoDao {
             return detalles;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al listar detalles del pedido", e);
+            throw new RuntimeException("Error al listarPedidos detalles del pedido", e);
         }
     }
 
@@ -86,7 +87,7 @@ public class DetallePedidoImpl implements DetallePedidoDao {
             return null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al guardar detalle de pedido", e);
+            throw new RuntimeException("Error al guardarPedido detalle de pedido", e);
         }
     }
     @Override
@@ -152,7 +153,7 @@ public class DetallePedidoImpl implements DetallePedidoDao {
             return filas > 0 ? productoId : null;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error al eliminar detalle", e);
+            throw new RuntimeException("Error al eliminarPedidoPorId detalle", e);
         }
     }
     private DetallePedido mapearDetalle(ResultSet rs) throws SQLException {

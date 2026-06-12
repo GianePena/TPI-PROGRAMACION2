@@ -6,6 +6,8 @@ import enums.Rol;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import interfaces.UsuarioDao;
 import utilidades.Utilidades;
 
 public class UsuarioDaoImpl implements UsuarioDao {
@@ -35,7 +37,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al guardar usuario: " + e.getMessage(), e);
+            throw new RuntimeException("Error al guardarPedido usuario: " + e.getMessage(), e);
         }
         return null;
     }
@@ -97,7 +99,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
                 usuarios.add(mapearUsuario(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Error al listar usuarios: " + e.getMessage(), e);
+            throw new RuntimeException("Error al listarPedidos usuarios: " + e.getMessage(), e);
         }
         return usuarios;
     }
@@ -136,7 +138,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
             }
             return null;
         } catch (SQLException e) {
-            throw new RuntimeException("Error al eliminar usuario: " + e.getMessage(), e);
+            throw new RuntimeException("Error al eliminarPedidoPorId usuario: " + e.getMessage(), e);
         }
     }
 
