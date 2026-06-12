@@ -3,9 +3,9 @@ package service;
 import dao.CategoriaDao;
 import dao.CategoriaDaoImpl;
 import entities.Categoria;
-import exceptions.CategoriaExistenteException;
-import exceptions.CategoriaNoEncontradaException;
+import exceptions.EsExistenteException;
 import exceptions.IdInvalidException;
+import exceptions.NoEncontradoException;
 import exceptions.StringInvalidException;
 import utilidades.Utilidades;
 
@@ -24,25 +24,25 @@ public class CategoriaService {
         return dao.buscarPorId(id);
     }
 
-    public Long agregarCategoria(String nombre, String descripcion) throws CategoriaExistenteException,StringInvalidException{
+    public Long agregarCategoria(String nombre, String descripcion) throws EsExistenteException,StringInvalidException{
         Utilidades.validarString(nombre);
         Utilidades.validarString(descripcion);
 
         Categoria existente=dao.buscarPorNombre(nombre);
         if(existente!=null){
-            throw new CategoriaExistenteException("Error ya existe una categoria con nombre " + nombre);
+            throw new EsExistenteException("Error ya existe una categoria con nombre " + nombre);
         }
         Categoria categoria=new Categoria(nombre, descripcion);
         return dao.guardar(categoria);
     }
 
-    public Long actualizarCategoria(Long id, String atributo, String valor)throws CategoriaNoEncontradaException, StringInvalidException,IllegalArgumentException, IdInvalidException{
+    public Long actualizarCategoria(Long id, String atributo, String valor)throws NoEncontradoException, StringInvalidException,IllegalArgumentException, IdInvalidException{
         Utilidades.validarId(id);
         Utilidades.validarString(atributo);
         Utilidades.validarString(valor);
         Categoria categoria=dao.buscarPorId(id);
         if (categoria==null){
-            throw new CategoriaNoEncontradaException("Error categoria no encontrada");
+            throw new NoEncontradoException("Error categoria no encontrada");
         }
         categoria.setUpdatedAt();
         switch (atributo.toLowerCase()){
@@ -56,11 +56,11 @@ public class CategoriaService {
                 throw new StringInvalidException("Error atributo a modificar invalido");
         }
     }
-    public Long eliminarCategoria(Long id)throws CategoriaNoEncontradaException, IdInvalidException {
+    public Long eliminarCategoria(Long id)throws NoEncontradoException, IdInvalidException {
         Utilidades.validarId(id);
         Categoria categoria=dao.buscarPorId(id);
         if (categoria==null){
-            throw new CategoriaNoEncontradaException("Error categoria no encontrada");
+            throw new NoEncontradoException("Error categoria no encontrada");
         }
         categoria.setEliminado(true);
         categoria.setDeletedAt();

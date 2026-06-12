@@ -4,8 +4,8 @@ import entities.Usuario;
 import enums.Rol;
 import exceptions.IdInvalidException;
 import exceptions.StringInvalidException;
-import exceptions.UsuarioExistenteException;
-import exceptions.UsuarioNoEncontradoException;
+import exceptions.EsExistenteException;
+import exceptions.NoEncontradoException;
 import service.UsuarioService;
 import utilidades.Utilidades;
 
@@ -38,7 +38,7 @@ public class MainUsuario {
         }
     }
 
-    private static void listarUsuarios() {
+    public static void listarUsuarios() {
         System.out.println("\n=== LISTADO DE USUARIOS ===");
         List<Usuario> lista = usuarioService.listarUsuarios();
 
@@ -46,7 +46,7 @@ public class MainUsuario {
             System.out.println("No hay usuarios cargados.");
         } else {
             for (Usuario u : lista) {
-                System.out.println(u.toStringLista());
+                System.out.println(u.toString());
             }
         }
     }
@@ -76,7 +76,7 @@ public class MainUsuario {
         try {
             Long id = usuarioService.createUsuario(nombre, apellido, mail, celular, contrasenia, rol);
             System.out.println("Usuario creado con ID: " + id);
-        } catch (StringInvalidException | UsuarioExistenteException e) {
+        } catch (StringInvalidException | EsExistenteException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -96,7 +96,7 @@ public class MainUsuario {
         try {
             Long idActualizado= usuarioService.updateUsuario(id, atributo,valor);
             System.out.println("Usuario actualizada. ID: " + idActualizado);
-        } catch ( StringInvalidException | IdInvalidException | UsuarioNoEncontradoException e) {
+        } catch (StringInvalidException | IdInvalidException | NoEncontradoException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -115,7 +115,7 @@ public class MainUsuario {
             try {
                 usuarioService.deleteUsuario(id);
                 System.out.println("Usuario eliminado (baja logica).");
-            } catch (IdInvalidException | UsuarioNoEncontradoException e) {
+            } catch (IdInvalidException | NoEncontradoException e) {
                 System.out.println("Error: " + e.getMessage());
             }
         } else {

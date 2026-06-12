@@ -10,9 +10,9 @@ import dao.ProductoDao;
 import dao.ProductoDaoImpl;
 import entities.Categoria;
 import entities.Producto;
+import exceptions.EsExistenteException;
 import exceptions.IdInvalidException;
-import exceptions.ProductoExistenteException;
-import exceptions.ProductoNoEncontradoException;
+import exceptions.NoEncontradoException;
 import exceptions.StringInvalidException;
 import utilidades.Utilidades;
 
@@ -21,6 +21,11 @@ import java.util.List;
 public class ProductoService {
 
     private ProductoDao dao = new ProductoDaoImpl();
+
+    public Producto buscarPorId(Long id)throws IdInvalidException{
+        Utilidades.validarId(id);
+        return dao.buscarPorId(id);
+    }
 
     public List<Producto> listarProductos() {
         return dao.listar();
@@ -33,7 +38,7 @@ public class ProductoService {
             int stock,
             String imagen,
             Categoria categoria
-    ) throws ProductoExistenteException, StringInvalidException {
+    ) throws EsExistenteException, StringInvalidException {
         Utilidades.validarString(nombre);
 
         if (precio < 0) {
@@ -57,7 +62,7 @@ public class ProductoService {
         Producto existente = dao.buscarPorNombre(nombre);
 
         if (existente != null) {
-            throw new ProductoExistenteException(
+            throw new EsExistenteException(
                     "Error: ya existe un producto con nombre " + nombre
             );
         }
@@ -73,13 +78,13 @@ public class ProductoService {
 
         return dao.guardar(producto);
     }
-    public Long actualizarProducto(Long id, String atributo, String valor) throws ProductoNoEncontradoException, StringInvalidException, IdInvalidException {
+    public Long actualizarProducto(Long id, String atributo, String valor) throws NoEncontradoException, StringInvalidException, IdInvalidException {
         Utilidades.validarId(id);
         Utilidades.validarString(atributo);
         Utilidades.validarString(valor);
         Producto producto = dao.buscarPorId(id);
         if (producto == null) {
-            throw new ProductoNoEncontradoException(
+            throw new NoEncontradoException(
                     "Error: producto no encontrado"
             );
         }
@@ -141,12 +146,12 @@ public class ProductoService {
     public Long actualizarCategoriaProducto(
             Long id,
             Categoria categoriaNueva
-    ) throws ProductoNoEncontradoException, IdInvalidException {
+    ) throws NoEncontradoException, IdInvalidException {
         Utilidades.validarId(id);
         Producto producto = dao.buscarPorId(id);
 
         if (producto == null) {
-            throw new ProductoNoEncontradoException(
+            throw new NoEncontradoException(
                     "Error: producto no encontrado"
             );
         }
@@ -157,12 +162,12 @@ public class ProductoService {
         return dao.actualizar(producto);
     }
 
-    public Long eliminarProducto(Long id) throws ProductoNoEncontradoException, IdInvalidException {
+    public Long eliminarProducto(Long id) throws NoEncontradoException, IdInvalidException {
         Utilidades.validarId(id);
         Producto producto = dao.buscarPorId(id);
 
         if (producto == null) {
-            throw new ProductoNoEncontradoException(
+            throw new NoEncontradoException(
                     "Error: producto no encontrado"
             );
         }
@@ -173,4 +178,3 @@ public class ProductoService {
         return dao.eliminar(producto);
     }
 }
-

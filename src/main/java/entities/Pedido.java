@@ -120,13 +120,17 @@ public class Pedido extends Base implements Calculable {
 
     @Override
     public String toString() {
-        return "| Pedido: " +
+        String detalleStr="";
+        for(DetallePedido d:detalles){
+            detalleStr=d.toString()+'\n';
+        }
+        return "PEDIDO " +
                 "\n| Fecha: " + fecha +
-                "\n| Estado: "+ estado +
-                "\n| Total: " + total +
+                "\n| Usuario: " + usuario.getNombre()+ " " +usuario.getApellido()+
+                "\n| Email: " + usuario.getMail()+
+                "\n| Detalles: " + detalleStr+
                 "\n| Forma de Pago: " + formaPago +
-                "\n| Usuario: " + usuario +
-                "\n| Detalles: " + detalles;
+                "\n| Total: " + total ;
     }
 }
 

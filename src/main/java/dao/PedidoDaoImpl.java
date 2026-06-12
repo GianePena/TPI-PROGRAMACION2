@@ -1,278 +1,290 @@
-//package dao;
-//
-//import config.HikariConnection;
-//import entities.Categoria;
-//import entities.Pedido;
-//
-//import java.sql.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//public class PedidoDaoImpl implements PedidoDao {
-//
-//    @Override
-//    public Long guardar(Pedido p) {
-//
-//        String sql = """
-//                INSERT INTO producto
-//                (nombre, precio, descripcion, stock, imagen,
-//                 disponible, categoria_id, eliminado, created_at)
-//                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-//                """;
-//
-//        try (
-//                Connection con = HikariConnection.getConnection();
-//                PreparedStatement ps = con.prepareStatement(
-//                        sql,
-//                        Statement.RETURN_GENERATED_KEYS
-//                )
-//        ) {
-//
-//            ps.setString(1, p.getNombre());
-//            ps.setDouble(2, p.getPrecio());
-//            ps.setString(3, p.getDescripcion());
-//            ps.setInt(4, p.getStock());
-//            ps.setString(5, p.getImagen());
-//            ps.setBoolean(6, p.isDisponible());
-//            ps.setLong(7, p.getCategoria().getId());
-//            ps.setBoolean(8, p.isEliminado());
-//            ps.setTimestamp(9, Timestamp.valueOf(p.getCreatedAt()));
-//
-//            int filasAfectadas = ps.executeUpdate();
-//
-//            if (filasAfectadas > 0) {
-//
-//                try (ResultSet rs = ps.getGeneratedKeys()) {
-//
-//                    if (rs.next()) {
-//
-//                        Long idGenerado = rs.getLong(1);
-//                        p.setId(idGenerado);
-//
-//                        return idGenerado;
-//                    }
-//                }
-//            }
-//
-//            return null;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al guardar el pedido", e);
-//        }
-//    }
-//
-//    @Override
-//    public List<Pedido> listar() {
-//
-//        String sql = """
-//                SELECT *
-//                FROM pedidos
-//                WHERE eliminado = false
-//                """;
-//
-//        List<Pedido> pedidos = new ArrayList<>();
-//
-//        try (
-//                Connection con = HikariConnection.getConnection();
-//                PreparedStatement ps = con.prepareStatement(sql)
-//        ) {
-//
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//
-//                Categoria categoria =
-//                        new CategoriaDaoImpl()
-//                                .buscarPorId(rs.getLong("categoria_id"));
-//
-//                Pedido pedido = new Pedido(
-//                        rs.getLong("id"),
-//                        rs.getBoolean("eliminado"),
-//                        rs.getTimestamp("created_at").toLocalDateTime(),
-//                        rs.getString("nombre"),
-//                        rs.getDouble("precio"),
-//                        rs.getString("descripcion"),
-//                        rs.getInt("stock"),
-//                        rs.getString("imagen"),
-//                        rs.getBoolean("disponible"),
-//                        categoria
-//                );
-//
-//                pedidos.add(pedido);
-//            }
-//
-//            return pedidos;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al listar productos", e);
-//        }
-//    }
-//
-//    @Override
-//    public Pedido buscarPorNombre(String nombre) {
-//
-//        String sql = """
-//                SELECT *
-//                FROM producto
-//                WHERE nombre = ?
-//                AND eliminado = false
-//                """;
-//
-//        try (
-//                Connection con = HikariConnection.getConnection();
-//                PreparedStatement ps = con.prepareStatement(sql)
-//        ) {
-//
-//            ps.setString(1, nombre);
-//
-//            try (ResultSet rs = ps.executeQuery()) {
-//
-//                if (rs.next()) {
-//
-//                    Categoria categoria =
-//                            new CategoriaDaoImpl()
-//                                    .buscarPorId(rs.getLong("categoria_id"));
-//
-//                    return new Pedido(
-//                            rs.getLong("id"),
-//                            rs.getBoolean("eliminado"),
-//                            rs.getTimestamp("created_at").toLocalDateTime(),
-//                            rs.getString("nombre"),
-//                            rs.getDouble("precio"),
-//                            rs.getString("descripcion"),
-//                            rs.getInt("stock"),
-//                            rs.getString("imagen"),
-//                            rs.getBoolean("disponible"),
-//                            categoria
-//                    );
-//                }
-//            }
-//
-//            return null;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al buscar el pedido", e);
-//        }
-//    }
-//
-//    @Override
-//    public Pedido buscarPorId(Long id) {
-//
-//        String sql = """
-//                SELECT *
-//                FROM pedido
-//                WHERE id = ?
-//                AND eliminado = false
-//                """;
-//
-//        try (
-//                Connection con = HikariConnection.getConnection();
-//                PreparedStatement ps = con.prepareStatement(sql)
-//        ) {
-//
-//            ps.setLong(1, id);
-//
-//            try (ResultSet rs = ps.executeQuery()) {
-//
-//                if (rs.next()) {
-//
-//                    Categoria categoria =
-//                            new CategoriaDaoImpl()
-//                                    .buscarPorId(rs.getLong("categoria_id"));
-//
-//                    return new Pedido(
-//                            rs.getLong("id"),
-//                            rs.getBoolean("eliminado"),
-//                            rs.getTimestamp("created_at").toLocalDateTime(),
-//                            rs.getString("nombre"),
-//                            rs.getDouble("precio"),
-//                            rs.getString("descripcion"),
-//                            rs.getInt("stock"),
-//                            rs.getString("imagen"),
-//                            rs.getBoolean("disponible"),
-//                            categoria
-//                    );
-//                }
-//            }
-//
-//            return null;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al buscar producto", e);
-//        }
-//    }
-//
-//    @Override
-//    public Long actualizar(Pedido p) {
-//
-//        String sql = """
-//                UPDATE producto
-//                SET nombre = ?,
-//                    precio = ?,
-//                    descripcion = ?,
-//                    stock = ?,
-//                    imagen = ?,
-//                    disponible = ?,
-//                    categoria_id = ?
-//                WHERE id = ?
-//                AND eliminado = false
-//                """;
-//
-//        try (
-//                Connection con = HikariConnection.getConnection();
-//                PreparedStatement ps = con.prepareStatement(sql)
-//        ) {
-//
-//            ps.setString(1, p.getNombre());
-//            ps.setDouble(2, p.getPrecio());
-//            ps.setString(3, p.getDescripcion());
-//            ps.setInt(4, p.getStock());
-//            ps.setString(5, p.getImagen());
-//            ps.setBoolean(6, p.isDisponible());
-//            ps.setLong(7, p.getCategoria().getId());
-//            ps.setLong(8, p.getId());
-//
-//            int filasAfectadas = ps.executeUpdate();
-//
-//            if (filasAfectadas > 0) {
-//                return p.getId();
-//            }
-//
-//            return null;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al actualizar producto", e);
-//        }
-//    }
-//
-//    @Override
-//    public Long eliminar(Pedido p) {
-//
-//        String sql = """
-//                UPDATE pedido
-//                SET eliminado = true
-//                WHERE id = ?
-//                """;
-//
-//        try (
-//                Connection con = HikariConnection.getConnection();
-//                PreparedStatement ps = con.prepareStatement(sql)
-//        ) {
-//
-//            ps.setLong(1, p.getId());
-//
-//            int filasAfectadas = ps.executeUpdate();
-//
-//            if (filasAfectadas > 0) {
-//                return p.getId();
-//            }
-//
-//            return null;
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error al eliminar producto", e);
-//        }
-//    }
-//
-//
-//}
+
+package dao;
+
+import config.HikariConnection;
+import entities.Categoria;
+import entities.Pedido;
+import entities.Producto;
+import entities.Usuario;
+import enums.Estado;
+import enums.FormaPago;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PedidoDaoImpl implements PedidoDao {
+
+    @Override
+    public Long guardar(Pedido p) {
+
+        String sql = """
+            INSERT INTO pedidos
+            (fecha, estado, total, forma_pago, usuario_id)
+            VALUES (?, ?, ?, ?, ?)
+            """;
+
+        try (
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(
+                        sql,
+                        Statement.RETURN_GENERATED_KEYS
+                )
+        ) {
+
+            ps.setDate(1, Date.valueOf(p.getFecha()));
+            ps.setString(2, p.getEstado().name());
+            ps.setDouble(3, p.getTotal());
+            ps.setString(4, p.getFormaPago().name());
+            ps.setLong(5, p.getUsuario().getId());
+
+            int filas = ps.executeUpdate();
+
+            if (filas > 0) {
+
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+
+                    if (rs.next()) {
+
+                        Long idGenerado = rs.getLong(1);
+                        p.setId(idGenerado);
+
+                        return idGenerado;
+                    }
+                }
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar pedido", e);
+        }
+    }
+
+    @Override
+    public List<Pedido> listar() {
+
+        String sql = """
+            SELECT *
+            FROM pedidos
+            """;
+
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try (
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+
+            while (rs.next()) {
+
+                Usuario usuario =
+                        new UsuarioDaoImpl()
+                                .buscarPorId(rs.getLong("usuario_id"));
+
+                Pedido pedido = new Pedido(
+                        rs.getLong("id"),
+                        rs.getDate("fecha").toLocalDate(),
+                        Estado.valueOf(rs.getString("estado")),
+                        rs.getDouble("total"),
+                        FormaPago.valueOf(rs.getString("forma_pago")),
+                        usuario,
+                        false,
+                        rs.getTimestamp("created_at").toLocalDateTime()
+                );
+
+                pedidos.add(pedido);
+            }
+
+            return pedidos;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al listar pedidos", e);
+        }
+    }
+
+    @Override
+    public List<Pedido> buscarPorUsuario(Long usuarioId) {
+
+        String sql = """
+            SELECT *
+            FROM pedidos
+            WHERE usuario_id = ?
+            """;
+
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try (
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setLong(1, usuarioId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+
+                    Usuario usuario =
+                            new UsuarioDaoImpl()
+                                    .buscarPorId(rs.getLong("usuario_id"));
+
+                    Pedido pedido = new Pedido(
+                            rs.getLong("id"),
+                            rs.getDate("fecha").toLocalDate(),
+                            Estado.valueOf(rs.getString("estado")),
+                            rs.getDouble("total"),
+                            FormaPago.valueOf(rs.getString("forma_pago")),
+                            usuario,
+                            false,
+                            rs.getTimestamp("created_at").toLocalDateTime()
+                    );
+
+                    pedidos.add(pedido);
+                }
+            }
+
+            return pedidos;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar pedidos del usuario", e);
+        }
+    }
+
+    public void buscarDetallePorPedido(Categoria categoria){
+        String sql="SELECT * FROM productos WHERE categoria_id=? AND eliminado = 0";
+        try(
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ){
+            ps.setLong(1, categoria.getId());
+            try(ResultSet rs = ps.executeQuery()){
+                while(rs.next()){
+
+                    Producto producto = new Producto(
+                            rs.getLong("id"),
+                            rs.getBoolean("eliminado"),
+                            rs.getTimestamp("created_at").toLocalDateTime(),
+                            rs.getString("nombre"),
+                            rs.getDouble("precio"),
+                            rs.getString("descripcion"),
+                            rs.getInt("stock"),
+                            rs.getString("imagen"),
+                            rs.getBoolean("disponible"),
+                            categoria
+                    );
+                    categoria.agregarProducto(producto);
+                }
+            }
+
+        }catch (Exception e){
+            throw new RuntimeException("Error al buscar producto por categoría", e);
+        }
+    }
+
+
+    @Override
+    public Pedido buscarPorId(Long id) {
+
+        String sql = """
+            SELECT *
+            FROM pedidos
+            WHERE id = ?
+            """;
+
+        try (
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setLong(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+
+                if (rs.next()) {
+
+                    Usuario usuario =
+                            new UsuarioDaoImpl()
+                                    .buscarPorId(rs.getLong("usuario_id"));
+
+                    return new Pedido(
+                            rs.getLong("id"),
+                            rs.getDate("fecha").toLocalDate(),
+                            Estado.valueOf(rs.getString("estado")),
+                            rs.getDouble("total"),
+                            FormaPago.valueOf(rs.getString("forma_pago")),
+                            usuario,
+                            false,
+                            rs.getTimestamp("created_at").toLocalDateTime()
+                    );
+                }
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar pedido", e);
+        }
+    }
+
+    @Override
+    public Long actualizar(Pedido p) {
+
+        String sql = """
+            UPDATE pedidos
+            SET estado = ?,
+                forma_pago = ?,
+                total = ?
+            WHERE id = ?
+            """;
+
+        try (
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setString(1, p.getEstado().name());
+            ps.setString(2, p.getFormaPago().name());
+            ps.setDouble(3, p.getTotal());
+            ps.setLong(4, p.getId());
+
+            int filas = ps.executeUpdate();
+
+            return filas > 0 ? p.getId() : null;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al actualizar pedido", e);
+        }
+    }
+
+    @Override
+    public Long eliminar(Long id) {
+
+        String sql = """
+                UPDATE pedidos
+                SET eliminado = true
+                WHERE id = ?
+                """;
+
+        try (
+                Connection con = HikariConnection.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql)
+        ) {
+
+            ps.setLong(1, id);
+
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                return id;
+            }
+
+            return null;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error al eliminar producto", e);
+        }
+    }
+}
+

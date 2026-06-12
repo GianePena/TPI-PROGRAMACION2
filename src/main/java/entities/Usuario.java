@@ -35,13 +35,9 @@ public class Usuario extends Base {
         this.setRol(rol);
     }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() {return nombre;}
+    public void setNombre(String nombre) {this.nombre = nombre;}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
     public String getApellido() {return apellido;}
     public void setApellido(String apellido) {this.apellido = apellido;}
 
@@ -57,41 +53,18 @@ public class Usuario extends Base {
     public Rol getRol() {return rol;}
     public void setRol(Rol rol) {this.rol = rol;}
 
-    public Long getId(){
-        return  super.getId();
-    }
-    public void setId(Long id){
-
-    }
-    public  java.time.LocalDateTime getCreatedAt(){
-        return super.getCreatedAt();
-    }
-    public void setCreatedAt(java.time.LocalDateTime createdAt){
-
-    }
-
+    public Long getId(){return  super.getId();}
 
     @Override
     public String toString() {
-        return "Usuario {" +
-                "id=" + getId() +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", mail='" + mail + '\'' +
-                ", celular='" + celular + '\'' +
-                ", contrasenia='" + contrasenia + '\'' +
-                ", rol=" + rol +
-                ", eliminado=" + isEliminado() +
-                ", CreatedAt=" + getCreatedAt() +
-                '}';
-
-        }
-        public String toStringLista() {
-        return String.format("ID %d - %s %s - Mail: %s - Celular: %s - Contasenia: %s - Rol: %s",
-                getId(), nombre , apellido, mail, celular, contrasenia, rol);
-
-        }
-
+        return "| Usuario:" +
+                "\n" + super.toString() +
+                "\n| Nombre: " + nombre +
+                "\n| Apellido: " + apellido +
+                "\n| Mail: " + mail +
+                "\n| Celular: " + celular +
+                "\n| Contraseña: " + contrasenia +
+                "\n| Rol: " + rol;
     }
-
+}
 

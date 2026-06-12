@@ -23,7 +23,7 @@ public class Main {
                     stmt.execute(trimmed);
                 }
             }
-            System.out.println("Schema creado correctamente");
+            System.out.println("\n- Schema creado correctamente");
         }
 
         Scanner sc = new Scanner(System.in);

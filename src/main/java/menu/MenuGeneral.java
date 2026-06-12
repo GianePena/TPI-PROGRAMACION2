@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class MenuGeneral {
     static void mostrarOpcionesMenu(){
-        System.out.println("=== SISTEMA DE PEDIDOS (FOOD STORE) ===");
+        System.out.println("\n=== SISTEMA DE PEDIDOS (FOOD STORE) ===");
         System.out.println("1. Categorias");
         System.out.println("2. Productos");
         System.out.println("3. Usuarios");
@@ -52,6 +52,8 @@ public class MenuGeneral {
                 case 4:
                     System.out.println("=== PEDIDOS ===");
                     mostrarSubopcionesMenu(sc);
+                   subOpcion =  Utilidades.leerInt(sc);
+                   MainPedido.menuPedido(subOpcion,sc);
                     continue;
 
                 case 0:

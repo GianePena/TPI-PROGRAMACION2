@@ -4,7 +4,6 @@ import config.HikariConnection;
 import entities.Usuario;
 import enums.Rol;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import utilidades.Utilidades;
@@ -88,7 +87,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
     @Override
     public List<Usuario> listar() {
-        String sql = "SELECT * FROM usuarios WHERE eliminado = FALSE";
+        String sql = "SELECT * FROM usuarios WHERE eliminado = 0";
         List<Usuario> usuarios = new ArrayList<>();
         try (Connection conn = HikariConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -143,31 +142,16 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
 
     private Usuario mapearUsuario(ResultSet rs) throws SQLException {
-
-        Long id = rs.getLong("id");
-        boolean eliminado = rs.getBoolean("eliminado");
-
-        String nombre = rs.getString("nombre");
-        String apellido = rs.getString("apellido");
-        String mail = rs.getString("mail");
-        String celular = rs.getString("celular");
-        String contrasenia = rs.getString("contrasenia");
-        Rol rol = Rol.valueOf(rs.getString("rol"));
-        LocalDateTime createdAt = null;
-        Timestamp ts = rs.getTimestamp("created_at");
-        if (ts != null) {
-            createdAt = ts.toLocalDateTime();
-        }
         return new Usuario(
-                id,
-                eliminado,
-                createdAt,
-                nombre,
-                apellido,
-                mail,
-                celular,
-                contrasenia,
-                rol
+                rs.getLong("id"),
+                rs.getBoolean("eliminado"),
+                rs.getTimestamp("created_at").toLocalDateTime(),
+                rs.getString("nombre"),
+                rs.getString("apellido"),
+                rs.getString("mail"),
+                rs.getString("celular"),
+                rs.getString("contrasenia"),
+                Rol.valueOf(rs.getString("rol"))
         );
     }
 }

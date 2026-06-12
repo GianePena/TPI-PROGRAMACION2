@@ -2,9 +2,9 @@ package menu;
 
 import entities.Categoria;
 import entities.Producto;
+import exceptions.EsExistenteException;
 import exceptions.IdInvalidException;
-import exceptions.ProductoExistenteException;
-import exceptions.ProductoNoEncontradoException;
+import exceptions.NoEncontradoException;
 import exceptions.StringInvalidException;
 import service.CategoriaService;
 import service.ProductoService;
@@ -19,7 +19,6 @@ public class MainProducto {
     private static final CategoriaService categoriaService = new CategoriaService();
     public static void menuProducto(int opcion, Scanner sc) {
         switch (opcion) {
-
             case 1:
                 listarProductos();
                 break;
@@ -105,7 +104,7 @@ public class MainProducto {
 
             System.out.println("Producto creado con ID: " + id);
 
-        } catch (ProductoExistenteException |
+        } catch (EsExistenteException |
                  StringInvalidException |
                  IllegalArgumentException e) {
 
@@ -144,10 +143,10 @@ public class MainProducto {
 
             System.out.println("Producto actualizado. ID: " + idActualizado);
 
-        } catch (ProductoNoEncontradoException |
+        } catch (NoEncontradoException |
                  StringInvalidException |
                  IllegalArgumentException |
-                IdInvalidException e) {
+                 IdInvalidException e) {
 
             System.out.println(e.getMessage());
         }
@@ -175,7 +174,7 @@ public class MainProducto {
 
             System.out.println("Producto eliminado. ID: " + idEliminado);
 
-        } catch (ProductoNoEncontradoException | IdInvalidException e) {
+        } catch (NoEncontradoException | IdInvalidException e) {
 
             System.out.println(e.getMessage());
         }

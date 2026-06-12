@@ -42,7 +42,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
         try(
                 Connection con = HikariConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)
-             ) {
+        ) {
             ps.setString(1, nombre);
             try(ResultSet rs=ps.executeQuery()){
                 if(rs.next()){
@@ -55,15 +55,16 @@ public class CategoriaDaoImpl implements CategoriaDao{
             throw new RuntimeException("Error al buscar categoria", e);
         }
     }
-    public void buscarProductoPorCategoria(Categoria categoria){
-        String sql="SELECT * FROM productos WHERE id=? AND eliminado = false";
-        try(
+
+    public void buscarProductoPorCategoria(Categoria categoria) {
+        String sql = "SELECT * FROM productos WHERE categoria_id=? AND eliminado = 0";
+        try (
                 Connection con = HikariConnection.getConnection();
                 PreparedStatement ps = con.prepareStatement(sql)
-        ){
+        ) {
             ps.setLong(1, categoria.getId());
-            try(ResultSet rs = ps.executeQuery()){
-                while(rs.next()){
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
 
                     Producto producto = new Producto(
                             rs.getLong("id"),
@@ -81,7 +82,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
                 }
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error al buscar producto por categoría", e);
         }
     }
@@ -99,7 +100,7 @@ public class CategoriaDaoImpl implements CategoriaDao{
                 Categoria categoria=mapearCategoria(rs);
                 buscarProductoPorCategoria(categoria);
                 catagorias.add(categoria);
-                }
+            }
             return catagorias;
         }catch (Exception e){
             throw new RuntimeException("Error al listar categorias", e);

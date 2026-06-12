@@ -1,10 +1,7 @@
 package menu;
 
 import entities.Categoria;
-import exceptions.CategoriaExistenteException;
-import exceptions.CategoriaNoEncontradaException;
-import exceptions.IdInvalidException;
-import exceptions.StringInvalidException;
+import exceptions.*;
 import service.CategoriaService;
 import utilidades.Utilidades;
 
@@ -46,21 +43,19 @@ public class MainCategoria {
         }
     }
     private static void crearCategoria(Scanner sc){
-        System.out.println("=== CREAR CATEGORIA ===");
         try {
+            System.out.println("=== CREAR CATEGORIA ===");
             System.out.print("Nombre: ");
             String nombre = Utilidades.leerString(sc);
 
             System.out.print("Descripcion: ");
             String descripcion = Utilidades.leerString(sc);
 
-            Long id = service.agregarCategoria(nombre,descripcion);
+            Long id = service.agregarCategoria(nombre, descripcion);
             System.out.println("Categoria creada con ID: " + id);
-
-        }catch (CategoriaExistenteException | StringInvalidException e) {
-            System.out.println(e.getMessage());
+        } catch (StringInvalidException e) {
+            System.out.println("Categoria invalida. ");
         }
-
     }
 
     private static void editarCategoria(Scanner sc){
@@ -80,7 +75,7 @@ public class MainCategoria {
             Long idActualizado = service.actualizarCategoria(id, atributo, valor);
             System.out.println("Categoria actualizada. ID: " + idActualizado);
 
-        } catch (CategoriaNoEncontradaException | StringInvalidException | IllegalArgumentException | IdInvalidException e) {
+        } catch (NoEncontradoException | StringInvalidException | IllegalArgumentException | IdInvalidException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -100,7 +95,7 @@ public class MainCategoria {
             Long idEliminado = service.eliminarCategoria(id);
             System.out.println("Categoria eliminada. ID: " + idEliminado);
 
-        } catch (CategoriaNoEncontradaException | IdInvalidException e) {
+        } catch (NoEncontradoException | IdInvalidException e) {
             System.out.println(e.getMessage());
         }
     }

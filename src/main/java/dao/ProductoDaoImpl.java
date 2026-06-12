@@ -5,7 +5,7 @@ import entities.Categoria;
 import entities.Producto;
 
 import java.sql.*;
-import java.util.ArrayList;
+        import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDaoImpl implements ProductoDao {
@@ -66,8 +66,11 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 SELECT *
-                FROM productos
-                WHERE eliminado = false
+                FROM productos p
+                JOIN categorias c
+                ON c.id = p.categoria_id
+                WHERE p.eliminado = 0
+                AND c.deleted_at IS NULL;
                 """;
 
         List<Producto> productos = new ArrayList<>();
@@ -81,6 +84,9 @@ public class ProductoDaoImpl implements ProductoDao {
 
             while (rs.next()) {
 
+                System.out.println("Producto encontrado: " +
+                        rs.getString("nombre"));
+
                 Categoria categoria =
                         new CategoriaDaoImpl()
                                 .buscarPorId(rs.getLong("categoria_id"));
@@ -89,6 +95,7 @@ public class ProductoDaoImpl implements ProductoDao {
 
                 productos.add(producto);
             }
+            System.out.println("Cantidad productos: " + productos.size());
 
             return productos;
 
@@ -104,7 +111,7 @@ public class ProductoDaoImpl implements ProductoDao {
                 SELECT *
                 FROM productos
                 WHERE nombre = ?
-                AND eliminado = false
+                AND eliminado = 0
                 """;
 
         try (
@@ -140,7 +147,7 @@ public class ProductoDaoImpl implements ProductoDao {
                 SELECT *
                 FROM productos
                 WHERE id = ?
-                AND eliminado = false
+                AND eliminado = 0
                 """;
 
         try (
@@ -182,7 +189,7 @@ public class ProductoDaoImpl implements ProductoDao {
                     disponible = ?,
                     categoria_id = ?
                 WHERE id = ?
-                AND eliminado = false
+                AND eliminado = 0
                 """;
 
         try (
@@ -217,7 +224,7 @@ public class ProductoDaoImpl implements ProductoDao {
 
         String sql = """
                 UPDATE productos
-                SET eliminado = true
+                SET eliminado = 1
                 WHERE id = ?
                 """;
         try (
