@@ -47,8 +47,8 @@ El proyecto fue realizado como parte del Trabajo Práctico N.º 10 de Programaci
 </dependency>
 ```
 
----
 
+---
 ## Estructura del Proyecto
 
 ```text
@@ -190,6 +190,21 @@ Representa cada producto incluido dentro de un pedido junto con:
 
 ## Patrón de Diseño Aplicado
 
+##  Arquitectura del proyecto
+
+El proyecto sigue una arquitectura en capas:
+
+```
+    Menú (UI de consola)
+       ↓
+   Service (lógica de negocio)
+       ↓
+   DAO / Interfaces (acceso a datos)
+       ↓
+   MySQL (persistencia)
+```
+
+
 ### DAO (Data Access Object)
 
 Permite desacoplar la lógica de acceso a datos de la lógica de negocio.
@@ -203,22 +218,77 @@ Permite desacoplar la lógica de acceso a datos de la lógica de negocio.
 
 ---
 
-## Configuración
+##  Configuración y ejecución
 
-1. Crear la base de datos MySQL.
-2. Ejecutar los scripts SQL correspondientes.
-3. Configurar usuario y contraseña en:
+### 1. Clonar el repositorio
 
-```java 
-// config.HikariConnection
+```bash
+git clone <url-del-repositorio>
+cd food-store
 ```
 
-4. Ejecutar la clase:
+### 2. Configurar la conexión a la base de datos
+
+Editar el archivo `src/main/java/config/HikariConnection.java` con tus credenciales:
 
 ```java
-// Main
+config.setJdbcUrl("jdbc:mysql://localhost:3306/foodstore?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
+config.setUsername("root");
+config.setPassword("tu_contraseña");
 ```
 
+### 3. Compilar y ejecutar
+
+```bash
+mvn compile
+mvn exec:java -Dexec.mainClass="Main"
+```
+
+> Al iniciar, la aplicación ejecuta automáticamente el `schema.sql` para crear la base de datos `foodstore` y todas sus tablas si no existen.
+ 
+---
+
+##  Funcionalidades
+
+El sistema presenta un menú principal con cuatro módulos:
+
+```
+=== SISTEMA DE PEDIDOS (FOOD STORE) ===
+1. Categorías
+2. Productos
+3. Usuarios
+4. Pedidos
+0. Salir
+```
+
+Cada módulo ofrece las operaciones **CRUD** completas:
+
+###  Categorías
+- Listar todas las categorías activas
+- Crear nueva categoría (nombre + descripción)
+- Editar nombre o descripción
+- Eliminar (soft delete)
+###  Productos
+- Listar todos los productos activos con su categoría
+- Crear producto (nombre, precio, descripción, stock, imagen, categoría)
+- La disponibilidad se actualiza automáticamente según el stock
+- Editar datos del producto
+- Eliminar (soft delete)
+###  Usuarios
+- Listar todos los usuarios
+- Crear usuario (nombre, apellido, mail, celular, contraseña, rol)
+- Roles disponibles: `ADMIN` | `USUARIO`
+- Editar datos del usuario
+- Eliminar (soft delete)
+###  Pedidos
+- Listar todos los pedidos con sus detalles
+- Crear pedido (asociado a un usuario, con forma de pago)
+- Agregar/quitar productos al detalle del pedido
+- Actualizar el detalle de un pedido existente
+- Estados del pedido: `PENDIENTE` → `CONFIRMADO` → `TERMINADO` | `CANCELADO`
+- Formas de pago: `EFECTIVO` | `TARJETA` | `TRANSFERENCIA`
+- El total se calcula automáticamente a partir de los detalles
+- Eliminar pedido (soft delete)
 ---
 
 ## Estado del Proyecto
